@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-02T22:30:51.654Z"
+last_updated: "2026-03-02T22:54:30Z"
 progress:
-  total_phases: 1
+  total_phases: 5
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 3
+  completed_plans: 3
 ---
 
 # Project State
@@ -22,33 +22,35 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 1 of 5 (Backend Core + Docker Foundation) — COMPLETE
-Plan: 2 of 2 in phase 1 — all plans complete
-Status: Phase 1 complete — ready to begin Phase 2
-Last activity: 2026-03-02 — Phase 1 fully verified end-to-end (Docker build, PDF conversion, error cases)
+Phase: 2 of 5 (Async Job System + SSE Progress) — IN PROGRESS
+Plan: 1 of 4 in phase 2 — plan 02-01 complete
+Status: Phase 2 in progress — 02-01 complete, async job pipeline and worker ready
+Last activity: 2026-03-02 — Phase 2 Plan 01: non-blocking POST /convert + conversion_worker
 
-Progress: [██░░░░░░░░] 14%
+Progress: [███░░░░░░░] 21%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~22.5 min
-- Total execution time: ~45 min
+- Total plans completed: 3
+- Average duration: ~17 min
+- Total execution time: ~47 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-backend-core-docker-foundation | 2 | ~45 min | ~22.5 min |
+| 02-async-job-system-sse-progress | 1 | ~2 min | ~2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~10 min), 01-02 (~35 min)
+- Last 5 plans: 01-01 (~10 min), 01-02 (~35 min), 02-01 (~2 min)
 - Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-backend-core-docker-foundation P01 | 1 | 3 tasks | 4 files |
 | Phase 01-backend-core-docker-foundation P02 | 2 | 3 tasks | 3 files |
+| Phase 02-async-job-system-sse-progress P01 | 3 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -65,6 +67,9 @@ Recent decisions affecting current work:
 - [Phase 01-backend-core-docker-foundation]: asyncio.Lock inside DoclingAdapter serializes concurrent Docling calls — shared internal state in PDF backend
 - [Phase 01-backend-core-docker-foundation]: size check via chunked 1MB read BEFORE disk write prevents disk exhaustion from oversized uploads
 - [Phase 01-backend-core-docker-foundation]: custom HTTPException + RequestValidationError handlers ensure all errors return {error: ...} — never FastAPI default {detail: ...}
+- [Phase 02-async-job-system-sse-progress 02-01]: conversion_worker runs as asyncio.create_task in lifespan — task reference kept on app.state._worker to prevent GC collection
+- [Phase 02-async-job-system-sse-progress 02-01]: dispatch_queue.task_done() in finally block — enables join() for deterministic test synchronization
+- [Phase 02-async-job-system-sse-progress 02-01]: POST handler does NOT delete temp file — worker owns lifecycle via finally block to prevent race condition
 
 ### Pending Todos
 
@@ -79,5 +84,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Phase 1 complete — 01-02 human-verify approved, all 7 checks passed — ready for Phase 2
+Stopped at: Completed 02-01-PLAN.md — async job pipeline and worker ready, proceeding to 02-02
 Resume file: None
