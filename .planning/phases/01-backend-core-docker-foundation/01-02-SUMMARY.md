@@ -52,7 +52,7 @@ patterns-established:
 
 requirements-completed: [CONV-01]
 
-duration: ~5min
+duration: ~35min (includes 30min Docker build + model download)
 completed: 2026-03-02
 ---
 
@@ -62,10 +62,10 @@ completed: 2026-03-02
 
 ## Performance
 
-- **Duration:** ~5 min
+- **Duration:** ~35 min (includes 30min Docker build + Docling model download on first build)
 - **Started:** 2026-03-02T22:15:00Z
-- **Completed:** 2026-03-02T22:20:00Z
-- **Tasks:** 2 of 3 (Task 3 is human-verify checkpoint)
+- **Completed:** 2026-03-02T23:00:00Z
+- **Tasks:** 3 of 3 (all complete, including human-verify checkpoint)
 - **Files created:** 3
 
 ## Accomplishments
@@ -80,7 +80,7 @@ Each task was committed atomically:
 
 1. **Task 1: Create config.py and adapter.py** - `3de8f6b` (feat)
 2. **Task 2: Create main.py with /convert endpoint** - `ee2f57f` (feat)
-3. **Task 3: Docker build and e2e verify** - awaiting human verification
+3. **Task 3: Docker build and e2e verify** - approved by user (all 7 checks passed)
 
 ## Files Created/Modified
 
@@ -103,43 +103,23 @@ None - plan executed exactly as written.
 
 None.
 
-## User Setup Required
+## End-to-End Verification (Task 3 — Human Approved)
 
-**Task 3 (checkpoint:human-verify):** Build the Docker image and verify end-to-end conversion:
+All 7 checks passed and approved by user:
 
-```bash
-# From project root /Users/ricky/MyProjects/docling-webapp/
-docker compose up --build -d
-# Wait 15-30 min for first build (Docling model download)
-
-docker compose ps  # backend should be "Up"
-curl -s http://localhost:3000/health  # expected: {"status":"ok"}
-
-# Test 415 — non-PDF rejection
-curl -s -X POST http://localhost:3000/convert -F "file=@/dev/null;filename=test.txt"
-# expected: HTTP 415, {"error":"Unsupported file type. Only PDF accepted."}
-
-# Test 413 — file too large
-dd if=/dev/zero of=/tmp/big.pdf bs=1M count=51 2>/dev/null
-curl -s -X POST http://localhost:3000/convert -F "file=@/tmp/big.pdf;filename=big.pdf"
-# expected: HTTP 413, {"error":"File exceeds 50MB limit"}
-rm /tmp/big.pdf
-
-# Test real PDF conversion
-curl -s -X POST http://localhost:3000/convert -F "file=@/path/to/your.pdf" | python3 -m json.tool
-# expected: {"markdown": "# <document content>..."}
-
-# Verify singleton (DocumentConverter appears once at startup)
-docker compose logs backend | grep "DocumentConverter"
-
-docker compose down
-```
+1. Docker build completed successfully
+2. Container running (backend "Up")
+3. GET /health returns `{"status":"ok"}`
+4. POST /convert with `.txt` file returns HTTP 415 `{"error":"Unsupported file type. Only PDF accepted."}`
+5. POST /convert with 51MB fake PDF returns HTTP 413 `{"error":"File exceeds 50MB limit"}`
+6. POST /convert with real PDF returns HTTP 200 `{"markdown":"..."}`
+7. Docker logs show "Initializing DocumentConverter" exactly once at startup (singleton confirmed)
 
 ## Next Phase Readiness
 
-- All three backend Python files created and syntactically valid
-- Awaiting `docker compose up --build` validation (Task 3 checkpoint)
-- After human approval, Phase 2 (frontend) can begin
+- All three backend Python files created, syntactically valid, and verified in Docker
+- Docker image built with Docling models pre-baked (no download on first request)
+- Phase 2 (Async Job System + SSE Progress) can begin
 
 ---
 *Phase: 01-backend-core-docker-foundation*

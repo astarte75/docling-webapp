@@ -33,8 +33,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Dockerfile + docker-compose.yml with Docling pre-installed and models pre-downloaded
-- [ ] 01-02-PLAN.md — FastAPI app with `/convert` endpoint, `DoclingAdapter` singleton, upload size enforcement
+- [x] 01-01-PLAN.md — Dockerfile + docker-compose.yml with Docling pre-installed and models pre-downloaded
+- [x] 01-02-PLAN.md — FastAPI app with `/convert` endpoint, `DoclingAdapter` singleton, upload size enforcement
 
 ### Phase 2: Async Job System + SSE Progress
 **Goal**: Conversions run non-blocking and clients receive real-time progress events

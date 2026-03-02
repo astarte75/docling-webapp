@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-02T22:14:54.398Z"
+last_updated: "2026-03-02T23:05:00.000Z"
 progress:
-  total_phases: 1
+  total_phases: 5
   completed_phases: 1
-  total_plans: 2
+  total_plans: 14
   completed_plans: 2
 ---
 
@@ -18,36 +18,37 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Convertire qualsiasi documento in Markdown pulito con un semplice browser upload, rendendo accessibile la potenza di Docling senza toccare la CLI.
-**Current focus:** Phase 1 — Backend Core + Docker Foundation
+**Current focus:** Phase 2 — Async Job System + SSE Progress
 
 ## Current Position
 
-Phase: 1 of 5 (Backend Core + Docker Foundation)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-03-02 — Roadmap created, all 25 v1 requirements mapped to 5 phases
+Phase: 1 of 5 (Backend Core + Docker Foundation) — COMPLETE
+Plan: 2 of 2 in phase 1 — all plans complete
+Status: Phase 1 complete — ready to begin Phase 2
+Last activity: 2026-03-02 — Phase 1 fully verified end-to-end (Docker build, PDF conversion, error cases)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 14%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: -
+- Total plans completed: 2
+- Average duration: ~22.5 min
+- Total execution time: ~45 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-backend-core-docker-foundation | 2 | ~45 min | ~22.5 min |
 
 **Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+- Last 5 plans: 01-01 (~10 min), 01-02 (~35 min)
+- Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-backend-core-docker-foundation P01 | 1 | 3 tasks | 4 files |
+| Phase 01-backend-core-docker-foundation P02 | 2 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -78,5 +79,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Roadmap created — ready to begin planning Phase 1
+Stopped at: Phase 1 complete — 01-02 human-verify approved, all 7 checks passed — ready for Phase 2
 Resume file: None
