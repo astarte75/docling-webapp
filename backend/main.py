@@ -120,22 +120,12 @@ async def convert(request: Request, file: UploadFile) -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"job_id": job_id})
 
 
-@app.get("/jobs/{job_id}/stream", response_class=EventSourceResponse, response_model=None)
-async def stream_job(
-    job_id: str, request: Request
-) -> AsyncIterable[ServerSentEvent]:
-    """Stream SSE progress events for a conversion job.
+async def _job_event_generator(job) -> AsyncIterable[ServerSentEvent]:
+    """Async generator that yields SSE events from a job's event queue.
 
-    Events: started -> (converting) -> completed | failed
-    The terminal event (completed/failed) closes the stream.
+    Reads from job.events until a terminal event (completed/failed) is received,
+    then exits. The worker guarantees a terminal event is always pushed.
     """
-    jobs = request.app.state.jobs
-    if job_id not in jobs:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Job not found",
-        )
-    job = jobs[job_id]
     while True:
         event_data: dict = await job.events.get()
         yield ServerSentEvent(
@@ -144,3 +134,21 @@ async def stream_job(
         )
         if event_data["type"] in ("completed", "failed"):
             break
+
+
+@app.get("/jobs/{job_id}/stream", response_model=None)
+async def stream_job(job_id: str, request: Request):
+    """Stream SSE progress events for a conversion job.
+
+    Events: started -> (converting) -> completed | failed
+    The terminal event (completed/failed) closes the stream.
+    Returns 404 if job_id is unknown.
+    """
+    jobs = request.app.state.jobs
+    if job_id not in jobs:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found",
+        )
+    job = jobs[job_id]
+    return EventSourceResponse(_job_event_generator(job))
