@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import uuid
@@ -9,6 +10,7 @@ from fastapi.responses import JSONResponse
 
 from adapter import DoclingAdapter
 from config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
+from job_store import Job, conversion_worker
 
 # Configure logging: INFO to stdout, visible via `docker compose logs`
 logging.basicConfig(
@@ -20,14 +22,22 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan: create DoclingAdapter singleton at startup."""
+    """Application lifespan: initialize DoclingAdapter, job queue, and worker task."""
     logger.info("Starting up: initializing DoclingAdapter...")
     app.state.converter = DoclingAdapter()
+    app.state.dispatch_queue = asyncio.Queue()
+    app.state.jobs: dict[str, Job] = {}
+    # Keep task reference — do not use fire-and-forget (GC would collect it)
+    app.state._worker = asyncio.create_task(conversion_worker(app.state))
     logger.info("DoclingAdapter ready — application startup complete")
     yield
-    # Shutdown cleanup
+    # Graceful shutdown: cancel worker
+    app.state._worker.cancel()
+    try:
+        await app.state._worker
+    except asyncio.CancelledError:
+        pass
     logger.info("Shutting down")
-    del app.state.converter
 
 
 app = FastAPI(title="Docling Webapp API", lifespan=lifespan)
@@ -61,16 +71,14 @@ async def health() -> dict:
 
 @app.post("/convert")
 async def convert(request: Request, file: UploadFile) -> JSONResponse:
-    """Convert an uploaded PDF to Markdown.
+    """Accept a PDF upload and enqueue it for async conversion.
 
     Returns:
-        200: {"markdown": "<converted content>"}
+        202: {"job_id": "<uuid>"} — job accepted, connect to SSE stream for progress
         413: {"error": "File exceeds 50MB limit"}
         415: {"error": "Unsupported file type. Only PDF accepted."}
-        422: {"error": "<docling exception message>"}
-        500: {"error": "Internal server error"}
     """
-    # Validate file extension + Content-Type before reading content
+    # Validate file extension before reading content
     filename = file.filename or ""
     ext = os.path.splitext(filename)[1].lower()
     if ext not in ALLOWED_EXTENSIONS:
@@ -93,40 +101,16 @@ async def convert(request: Request, file: UploadFile) -> JSONResponse:
 
     content = b"".join(chunks)
 
-    # Write to temp file, convert, clean up
-    tmp_path = f"/tmp/{uuid.uuid4()}.pdf"
-    logger.info("Converting file: %s (%d bytes) → %s", filename, total_bytes, tmp_path)
+    # Write to temp file — worker is responsible for deletion (not this handler)
+    job_id = str(uuid.uuid4())
+    tmp_path = f"/tmp/{job_id}.pdf"
+    with open(tmp_path, "wb") as f:
+        f.write(content)
 
-    try:
-        with open(tmp_path, "wb") as f:
-            f.write(content)
+    # Register job and enqueue
+    job = Job(job_id=job_id, tmp_path=tmp_path)
+    request.app.state.jobs[job_id] = job
+    await request.app.state.dispatch_queue.put(job_id)
 
-        converter: DoclingAdapter = request.app.state.converter
-        markdown = await converter.convert_file(tmp_path)
-
-        logger.info("Conversion complete: %s (%d chars output)", filename, len(markdown))
-        return JSONResponse(content={"markdown": markdown})
-
-    except HTTPException:
-        raise
-
-    except RuntimeError as exc:
-        # Docling reported a non-success status
-        logger.error("Docling conversion failed for %s: %s", filename, exc)
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=str(exc),
-        )
-
-    except Exception as exc:
-        logger.exception("Unexpected error converting %s", filename)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error",
-        )
-
-    finally:
-        # Always delete temp file — even on exception — to prevent data leakage
-        if os.path.exists(tmp_path):
-            os.remove(tmp_path)
-            logger.info("Temp file deleted: %s", tmp_path)
+    logger.info("Job %s queued (%d bytes, %s)", job_id, total_bytes, filename)
+    return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"job_id": job_id})
