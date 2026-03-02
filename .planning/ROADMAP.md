@@ -13,7 +13,7 @@ Five phases that build from the riskiest unknown outward. Phase 1 proves Docling
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Backend Core + Docker Foundation** - Prove Docling works in Docker and establish the FastAPI upload endpoint (completed 2026-03-02)
-- [ ] **Phase 2: Async Job System + SSE Progress** - Add non-blocking conversion pipeline with real-time progress via SSE
+- [x] **Phase 2: Async Job System + SSE Progress** - Add non-blocking conversion pipeline with real-time progress via SSE (completed 2026-03-03)
 - [ ] **Phase 3: React Frontend — Single File Flow** - Complete end-to-end UX for uploading, converting, previewing, and downloading one file
 - [ ] **Phase 4: Options Panel + Batch Conversion** - Add Docling configuration controls and multi-file batch support with ZIP download
 - [ ] **Phase 5: Production Docker Compose** - Finalize deployment with nginx, environment configuration, and health checks
@@ -49,8 +49,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Job dataclass + FIFO conversion_worker, async POST /convert returning 202 + job_id
-- [ ] 02-02-PLAN.md — GET /jobs/{job_id}/stream SSE endpoint with EventSourceResponse, end-to-end verification
+- [x] 02-01-PLAN.md — Job dataclass + FIFO conversion_worker, async POST /convert returning 202 + job_id
+- [x] 02-02-PLAN.md — GET /jobs/{job_id}/stream SSE endpoint with StreamingResponse, end-to-end verification
 
 ### Phase 3: React Frontend — Single File Flow
 **Goal**: A user can upload one document, watch it convert, and download or copy the Markdown result
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Core + Docker Foundation | 2/2 | Complete   | 2026-03-02 |
-| 2. Async Job System + SSE Progress | 1/2 | In Progress|  |
+| 2. Async Job System + SSE Progress | 2/2 | Complete   | 2026-03-03 |
 | 3. React Frontend — Single File Flow | 0/4 | Not started | - |
 | 4. Options Panel + Batch Conversion | 0/3 | Not started | - |
 | 5. Production Docker Compose | 0/3 | Not started | - |

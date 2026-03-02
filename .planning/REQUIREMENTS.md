@@ -17,8 +17,8 @@
 
 - [x] **CONV-01**: User can trigger document conversion with a single action after upload
 - [x] **CONV-02**: System processes conversion asynchronously and returns immediately with a job ID (non-blocking)
-- [ ] **CONV-03**: User sees real-time conversion progress driven by Server-Sent Events (SSE)
-- [ ] **CONV-04**: User sees a clear success state with result preview when conversion completes
+- [x] **CONV-03**: User sees real-time conversion progress driven by Server-Sent Events (SSE)
+- [x] **CONV-04**: User sees a clear success state with result preview when conversion completes
 - [x] **CONV-05**: User sees a clear error state with an actionable error message when conversion fails
 
 ### Output
@@ -92,8 +92,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFR-03 | Phase 1 | Complete |
 | CONV-01 | Phase 1 | Complete |
 | CONV-02 | Phase 2 | Complete |
-| CONV-03 | Phase 2 | Pending |
-| CONV-04 | Phase 2 | Pending |
+| CONV-03 | Phase 2 | Complete |
+| CONV-04 | Phase 2 | Complete |
 | CONV-05 | Phase 2 | Complete |
 | UPLD-01 | Phase 3 | Pending |
 | UPLD-02 | Phase 3 | Pending |
