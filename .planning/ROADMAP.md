@@ -43,14 +43,14 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. POSTing a file to `/convert` returns immediately with a `job_id` (HTTP 202)
   2. Connecting to the SSE endpoint streams conversion progress events in real time
-  3. A completed job shows a success state with the result accessible via the API
+  3. A completed job's markdown is delivered inline in the final SSE event
   4. A failed conversion returns a structured error message describing what went wrong
-  5. No more than 2 conversions run concurrently — additional requests queue or return 503
-**Plans**: TBD
+  5. Jobs queue FIFO — no request is rejected, all are accepted and processed in order
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: In-memory job manager with `asyncio.Queue`, `asyncio.Semaphore`, and TTL cleanup
-- [ ] 02-02: SSE streaming endpoint (`StreamingResponse`) and job status polling endpoint
+- [ ] 02-01-PLAN.md — Job dataclass + FIFO conversion_worker, async POST /convert returning 202 + job_id
+- [ ] 02-02-PLAN.md — GET /jobs/{job_id}/stream SSE endpoint with EventSourceResponse, end-to-end verification
 
 ### Phase 3: React Frontend — Single File Flow
 **Goal**: A user can upload one document, watch it convert, and download or copy the Markdown result
