@@ -1,12 +1,15 @@
 import asyncio
+import json
 import logging
 import os
 import uuid
+from collections.abc import AsyncIterable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request, UploadFile, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.sse import EventSourceResponse, ServerSentEvent
 
 from adapter import DoclingAdapter
 from config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
@@ -31,12 +34,13 @@ async def lifespan(app: FastAPI):
     app.state._worker = asyncio.create_task(conversion_worker(app.state))
     logger.info("DoclingAdapter ready — application startup complete")
     yield
-    # Graceful shutdown: cancel worker
-    app.state._worker.cancel()
-    try:
-        await app.state._worker
-    except asyncio.CancelledError:
-        pass
+    # Graceful shutdown: cancel worker if it was started
+    if app.state._worker is not None:
+        app.state._worker.cancel()
+        try:
+            await app.state._worker
+        except asyncio.CancelledError:
+            pass
     logger.info("Shutting down")
 
 
@@ -114,3 +118,29 @@ async def convert(request: Request, file: UploadFile) -> JSONResponse:
 
     logger.info("Job %s queued (%d bytes, %s)", job_id, total_bytes, filename)
     return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"job_id": job_id})
+
+
+@app.get("/jobs/{job_id}/stream", response_class=EventSourceResponse, response_model=None)
+async def stream_job(
+    job_id: str, request: Request
+) -> AsyncIterable[ServerSentEvent]:
+    """Stream SSE progress events for a conversion job.
+
+    Events: started -> (converting) -> completed | failed
+    The terminal event (completed/failed) closes the stream.
+    """
+    jobs = request.app.state.jobs
+    if job_id not in jobs:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found",
+        )
+    job = jobs[job_id]
+    while True:
+        event_data: dict = await job.events.get()
+        yield ServerSentEvent(
+            data=json.dumps(event_data),
+            event=event_data["type"],
+        )
+        if event_data["type"] in ("completed", "failed"):
+            break
