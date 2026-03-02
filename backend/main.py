@@ -3,13 +3,11 @@ import json
 import logging
 import os
 import uuid
-from collections.abc import AsyncIterable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request, UploadFile, status
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from fastapi.sse import EventSourceResponse, ServerSentEvent
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from adapter import DoclingAdapter
 from config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
@@ -120,19 +118,17 @@ async def convert(request: Request, file: UploadFile) -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"job_id": job_id})
 
 
-async def _job_event_generator(job) -> AsyncIterable[ServerSentEvent]:
-    """Async generator that yields SSE events from a job's event queue.
+async def _job_event_generator(job):
+    """Async generator that yields SSE-formatted strings from a job's event queue.
 
     Reads from job.events until a terminal event (completed/failed) is received,
     then exits. The worker guarantees a terminal event is always pushed.
     """
     while True:
         event_data: dict = await job.events.get()
-        yield ServerSentEvent(
-            data=json.dumps(event_data),
-            event=event_data["type"],
-        )
-        if event_data["type"] in ("completed", "failed"):
+        event_type = event_data["type"]
+        yield f"event: {event_type}\ndata: {json.dumps(event_data)}\n\n"
+        if event_type in ("completed", "failed"):
             break
 
 
@@ -151,4 +147,4 @@ async def stream_job(job_id: str, request: Request):
             detail="Job not found",
         )
     job = jobs[job_id]
-    return EventSourceResponse(_job_event_generator(job))
+    return StreamingResponse(_job_event_generator(job), media_type="text/event-stream")
