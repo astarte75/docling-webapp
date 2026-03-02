@@ -30,11 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Docling models are present in the Docker image — no download occurs on first request
   4. The API rejects files over 50MB with a clear error response
   5. The `DocumentConverter` is instantiated once at startup, not per request
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Dockerfile + docker-compose.yml with Docling pre-installed and models pre-downloaded
-- [ ] 01-02: FastAPI app with `/convert` endpoint, `DoclingAdapter` singleton, upload size enforcement
+- [ ] 01-01-PLAN.md — Dockerfile + docker-compose.yml with Docling pre-installed and models pre-downloaded
+- [ ] 01-02-PLAN.md — FastAPI app with `/convert` endpoint, `DoclingAdapter` singleton, upload size enforcement
 
 ### Phase 2: Async Job System + SSE Progress
 **Goal**: Conversions run non-blocking and clients receive real-time progress events
