@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-03-02T22:11:58.274Z"
+progress:
+  total_phases: 1
+  completed_phases: 0
+  total_plans: 2
+  completed_plans: 1
+---
+
 # Project State
 
 ## Project Reference
@@ -34,6 +47,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-backend-core-docker-foundation P01 | 1 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -45,6 +59,8 @@ Recent decisions affecting current work:
 - [Research]: Use `asyncio.to_thread` for v1 (not Celery) — simpler, sufficient for single-user; DoclingAdapter abstraction makes Celery upgrade contained
 - [Research]: `DocumentConverter` singleton at FastAPI startup via `lifespan` — prevents per-request model reload
 - [Research]: Python 3.12 (not 3.13 — free-threaded builds experimental), Tailwind 3.4 (not v4 — beta risk)
+- [Phase 01-backend-core-docker-foundation]: python:3.12-slim-bookworm + CPU-only PyTorch via extra-index-url keeps image under 5GB; Docling models pre-baked at build time
+- [Phase 01-backend-core-docker-foundation]: libgl1 + libglib2.0-0 mandatory system deps — Docling/OpenCV fail at import time without them
 
 ### Pending Todos
 

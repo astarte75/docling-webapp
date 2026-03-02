@@ -44,9 +44,9 @@
 
 ### Infrastructure
 
-- [ ] **INFR-01**: Application starts with a single `docker compose up` command
-- [ ] **INFR-02**: Docling models are pre-downloaded in the Docker image so the first conversion does not hang waiting for downloads
-- [ ] **INFR-03**: Application is accessible via browser at a configurable localhost port (default 3000)
+- [x] **INFR-01**: Application starts with a single `docker compose up` command
+- [x] **INFR-02**: Docling models are pre-downloaded in the Docker image so the first conversion does not hang waiting for downloads
+- [x] **INFR-03**: Application is accessible via browser at a configurable localhost port (default 3000)
 
 ## v2 Requirements
 
@@ -87,9 +87,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFR-01 | Phase 1 | Pending |
-| INFR-02 | Phase 1 | Pending |
-| INFR-03 | Phase 1 | Pending |
+| INFR-01 | Phase 1 | Complete |
+| INFR-02 | Phase 1 | Complete |
+| INFR-03 | Phase 1 | Complete |
 | CONV-01 | Phase 1 | Pending |
 | CONV-02 | Phase 2 | Pending |
 | CONV-03 | Phase 2 | Pending |
