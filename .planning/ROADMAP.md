@@ -60,16 +60,15 @@ Plans:
   1. User can drag a file onto the upload area or click to browse and select a file
   2. Unsupported file types are rejected client-side before upload with a clear error message
   3. A file over 50MB is rejected client-side with a clear size error message
-  4. A progress bar shows upload progress while the file transfers to the server
-  5. After upload, the user sees live conversion progress driven by the SSE stream
-  6. When conversion completes, the user sees rendered Markdown inline, can download the `.md` file, and can copy the content to clipboard
-**Plans**: TBD
+  4. After upload, the user sees live conversion progress driven by the SSE stream (spinner, no progress bar — per user decision)
+  5. When conversion completes, the user sees rendered Markdown inline, can download the `.md` file, and can copy the content to clipboard
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: Vite + React project scaffold with shadcn/ui, Tailwind, TanStack Query, react-dropzone
-- [ ] 03-02: UploadForm component with drag-and-drop, file validation, and upload progress bar
-- [ ] 03-03: SSEManager hook + JobStore, conversion progress UI, success/error states
-- [ ] 03-04: ResultViewer with react-markdown preview, download button, copy-to-clipboard
+- [ ] 03-01-PLAN.md — Vite + React scaffold, TypeScript types, Tailwind v4, shadcn/ui, TanStack Query, Vite /api proxy
+- [ ] 03-02-PLAN.md — useUpload + useJobStream hooks, UploadZone component with drag-and-drop and validation
+- [ ] 03-03-PLAN.md — ConversionProgress spinner, ResultViewer with Preview/Raw tabs + sticky action bar
+- [ ] 03-04-PLAN.md — App.tsx state machine wiring all components + human verification checkpoint
 
 ### Phase 4: Options Panel + Batch Conversion
 **Goal**: Users can configure Docling settings and convert multiple files at once, downloading results as a ZIP
