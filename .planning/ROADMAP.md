@@ -12,7 +12,7 @@ Five phases that build from the riskiest unknown outward. Phase 1 proves Docling
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Backend Core + Docker Foundation** - Prove Docling works in Docker and establish the FastAPI upload endpoint
+- [x] **Phase 1: Backend Core + Docker Foundation** - Prove Docling works in Docker and establish the FastAPI upload endpoint (completed 2026-03-02)
 - [ ] **Phase 2: Async Job System + SSE Progress** - Add non-blocking conversion pipeline with real-time progress via SSE
 - [ ] **Phase 3: React Frontend — Single File Flow** - Complete end-to-end UX for uploading, converting, previewing, and downloading one file
 - [ ] **Phase 4: Options Panel + Batch Conversion** - Add Docling configuration controls and multi-file batch support with ZIP download
@@ -112,7 +112,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Backend Core + Docker Foundation | 1/2 | In Progress|  |
+| 1. Backend Core + Docker Foundation | 2/2 | Complete   | 2026-03-02 |
 | 2. Async Job System + SSE Progress | 0/2 | Not started | - |
 | 3. React Frontend — Single File Flow | 0/4 | Not started | - |
 | 4. Options Panel + Batch Conversion | 0/3 | Not started | - |

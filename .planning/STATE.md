@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-02T22:11:58.274Z"
+last_updated: "2026-03-02T22:14:54.398Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -61,6 +61,9 @@ Recent decisions affecting current work:
 - [Research]: Python 3.12 (not 3.13 — free-threaded builds experimental), Tailwind 3.4 (not v4 — beta risk)
 - [Phase 01-backend-core-docker-foundation]: python:3.12-slim-bookworm + CPU-only PyTorch via extra-index-url keeps image under 5GB; Docling models pre-baked at build time
 - [Phase 01-backend-core-docker-foundation]: libgl1 + libglib2.0-0 mandatory system deps — Docling/OpenCV fail at import time without them
+- [Phase 01-backend-core-docker-foundation]: asyncio.Lock inside DoclingAdapter serializes concurrent Docling calls — shared internal state in PDF backend
+- [Phase 01-backend-core-docker-foundation]: size check via chunked 1MB read BEFORE disk write prevents disk exhaustion from oversized uploads
+- [Phase 01-backend-core-docker-foundation]: custom HTTPException + RequestValidationError handlers ensure all errors return {error: ...} — never FastAPI default {detail: ...}
 
 ### Pending Todos
 
