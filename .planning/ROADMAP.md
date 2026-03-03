@@ -80,12 +80,14 @@ Plans:
   3. User can upload multiple files in one session and see individual status for each file (pending / converting / done / error)
   4. The backend converts batch files with a maximum of 2 concurrent jobs running simultaneously
   5. User can download all successfully converted files as a single `.zip` archive with one click
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 04-01: Backend `PipelineOptions` mapping — OCR mode, table detection, page range, OCR language
-- [ ] 04-02: Frontend configuration panel (OCR control visible, advanced panel collapsible)
-- [ ] 04-03: BatchManager component with per-file status display and ZIP download endpoint
+- [ ] 04-01-PLAN.md — Backend ConversionOptions dataclass, DoclingAdapter + PipelineOptions, semaphore worker, POST /convert form fields
+- [ ] 04-02-PLAN.md — Frontend types (ConversionOptions, BatchFile, AppPhase), JSZip + shadcn components install
+- [ ] 04-03-PLAN.md — OptionsPanel component (OCR ToggleGroup + Collapsible advanced panel)
+- [ ] 04-04-PLAN.md — useBatchUpload hook, BatchFileRow + BatchList components with ZIP download
+- [ ] 04-05-PLAN.md — UploadZone multi-file + App.tsx wiring + human verification checkpoint
 
 ### Phase 5: Production Docker Compose
 **Goal**: The application deploys with a single command and is ready for self-hosted production use
@@ -114,5 +116,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Backend Core + Docker Foundation | 2/2 | Complete   | 2026-03-02 |
 | 2. Async Job System + SSE Progress | 2/2 | Complete   | 2026-03-03 |
 | 3. React Frontend — Single File Flow | 4/4 | Complete   | 2026-03-03 |
-| 4. Options Panel + Batch Conversion | 0/3 | Not started | - |
+| 4. Options Panel + Batch Conversion | 0/5 | Not started | - |
 | 5. Production Docker Compose | 0/3 | Not started | - |
