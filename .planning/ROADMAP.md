@@ -132,13 +132,15 @@ Plans:
 
 ### Phase 7: visual-redesign-frontend-design
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Redesign visivo completo del frontend: palette emerald come accent, dark mode con toggle nell'header, UploadZone con bordo e glow emerald, ResultViewer con tipografia curata e dark:prose-invert
+**Requirements**: (visual design — no nuovi requirement ID; miglioramento estetico dei componenti esistenti)
 **Depends on:** Phase 6
-**Plans:** 0 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — CSS vars emerald in index.css, ThemeProvider context, ModeToggle componente
+- [ ] 07-02-PLAN.md — App.tsx wiring ThemeProvider + ModeToggle, UploadZone glow emerald, ResultViewer tipografia
+- [ ] 07-03-PLAN.md — Human verification checkpoint del redesign visivo completo
 
 ### Phase 8: OCR Engine Research and Selection
 
