@@ -72,16 +72,25 @@ export function UploadZone({ onFilesSelected, disabled = false, compact = false 
       <div
         {...getRootProps()}
         className={[
-          'w-full rounded-xl border-2 border-dashed px-8 py-12 text-center',
-          'transition-colors cursor-pointer select-none',
+          'w-full rounded-xl border-2 px-8 py-12 text-center',
+          'transition-all duration-200 cursor-pointer select-none',
           isDragActive
-            ? 'border-primary bg-primary/5 text-primary'
-            : 'border-muted-foreground/30 hover:border-primary/60 hover:bg-muted/40',
+            ? [
+                'border-emerald-500 border-solid',
+                'bg-emerald-50/60 dark:bg-emerald-950/30',
+                'shadow-lg shadow-emerald-500/40',
+                'text-emerald-700 dark:text-emerald-300',
+              ].join(' ')
+            : [
+                'border-emerald-600/40',
+                'hover:border-emerald-500 hover:bg-emerald-50/30',
+                'dark:border-emerald-700/40 dark:hover:border-emerald-500',
+              ].join(' '),
           disabled ? 'pointer-events-none opacity-50' : '',
         ].join(' ')}
       >
         <input {...getInputProps()} />
-        <UploadCloud className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
+        <UploadCloud className="mx-auto mb-3 h-10 w-10 text-emerald-600 dark:text-emerald-400" />
         {isDragActive ? (
           <p className="text-sm font-medium">Drop your files here</p>
         ) : (
