@@ -9,6 +9,7 @@ async function uploadFileWithOptions(
   const formData = new FormData();
   formData.append('file', file);
   formData.append('ocr_mode', opts.ocrMode);
+  formData.append('ocr_engine', opts.ocrEngine);
   formData.append('table_detection', String(opts.tableDetection));
   if (opts.pageFrom !== null) formData.append('page_from', String(opts.pageFrom));
   if (opts.pageTo !== null) formData.append('page_to', String(opts.pageTo));

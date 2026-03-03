@@ -28,6 +28,7 @@ export default function App() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('ocr_mode', currentOptions.ocrMode);
+        formData.append('ocr_engine', currentOptions.ocrEngine);
         formData.append('table_detection', String(currentOptions.tableDetection));
         if (currentOptions.pageFrom !== null) formData.append('page_from', String(currentOptions.pageFrom));
         if (currentOptions.pageTo !== null) formData.append('page_to', String(currentOptions.pageTo));
