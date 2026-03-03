@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T06:56:41.889Z"
+last_updated: "2026-03-03T07:11:51.089Z"
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 3 of 5 (React Frontend — Single File Flow) — IN PROGRESS
-Plan: 3 of 4 in phase 3 — plan 03-03 complete
-Status: Phase 3 plan 03 complete — ConversionProgress and ResultViewer components
-Last activity: 2026-03-03 — Phase 3 Plan 03: ConversionProgress, ResultViewer
+Phase: 3 of 5 (React Frontend — Single File Flow) — COMPLETE
+Plan: 4 of 4 in phase 3 — plan 03-04 complete
+Status: Phase 3 complete — App.tsx state machine, full end-to-end flow verified in browser
+Last activity: 2026-03-03 — Phase 3 Plan 04: App.tsx state machine integration
 
-Progress: [██████░░░░] 62%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [██████░░░░] 62%
 | Phase 03-react-frontend-single-file-flow P01 | 4 | 2 tasks | 20 files |
 | Phase 03-react-frontend-single-file-flow P02 | 1 | 2 tasks | 3 files |
 | Phase 03-react-frontend-single-file-flow P03 | 5 | 2 tasks | 2 files |
+| Phase 03-react-frontend-single-file-flow P04 | 20 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,8 @@ Recent decisions affecting current work:
 - [Phase 03-react-frontend-single-file-flow 03-02]: No upload progress bar — UploadZone hands file to parent via onFileSelected; App manages state machine
 - [Phase 03-react-frontend-single-file-flow]: react-markdown v10: wrap in div.prose (not className on Markdown component) — v10 removed className prop
 - [Phase 03-react-frontend-single-file-flow]: Copy feedback via useState+setTimeout 2s, no toast — no external dependency
+- [Phase 03-react-frontend-single-file-flow]: Vite proxy target corrected to localhost:3000 (docker-compose host port) — was incorrectly set to localhost:8000 (container internal port)
+- [Phase 03-react-frontend-single-file-flow]: jobId=null passed to useJobStream in all non-converting phases — prevents spurious SSE connections
 
 ### Pending Todos
 
@@ -95,5 +98,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 03-03-PLAN.md — ConversionProgress and ResultViewer components
+Stopped at: Completed 03-04-PLAN.md — App.tsx state machine integration, all UPLD and OUTP requirements verified
 Resume file: None
