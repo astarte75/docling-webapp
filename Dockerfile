@@ -8,6 +8,15 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Tesseract system dependencies for TesseractOcrOptions support
+# MUST be installed before pip install (tesserocr links against libtesseract-dev at build time)
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    libtesseract-dev \
+    libleptonica-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Install Python dependencies with CPU-only PyTorch
@@ -19,6 +28,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
 # Pre-download Docling models at build time (INFR-02)
 # This prevents 5-10 min hangs on first request
 RUN docling-tools models download
+
+# Pre-download RapidOCR models if available in docling-tools
+RUN docling-tools models download rapidocr 2>/dev/null || true
 
 # Set explicit model path so Docling finds pre-baked models at runtime
 ENV DOCLING_ARTIFACTS_PATH=/root/.cache/docling/models

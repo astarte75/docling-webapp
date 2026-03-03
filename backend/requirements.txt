@@ -2,3 +2,5 @@ fastapi>=0.135.0
 uvicorn[standard]
 python-multipart
 docling
+rapidocr-onnxruntime
+tesserocr
