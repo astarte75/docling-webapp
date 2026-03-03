@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Backend Core + Docker Foundation** - Prove Docling works in Docker and establish the FastAPI upload endpoint (completed 2026-03-02)
 - [x] **Phase 2: Async Job System + SSE Progress** - Add non-blocking conversion pipeline with real-time progress via SSE (completed 2026-03-03)
 - [x] **Phase 3: React Frontend — Single File Flow** - Complete end-to-end UX for uploading, converting, previewing, and downloading one file (completed 2026-03-03)
-- [ ] **Phase 4: Options Panel + Batch Conversion** - Add Docling configuration controls and multi-file batch support with ZIP download
+- [x] **Phase 4: Options Panel + Batch Conversion** - Add Docling configuration controls and multi-file batch support with ZIP download (completed 2026-03-03)
 - [ ] **Phase 5: Production Docker Compose** - Finalize deployment with nginx, environment configuration, and health checks
 
 ## Phase Details
@@ -116,5 +116,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Backend Core + Docker Foundation | 2/2 | Complete   | 2026-03-02 |
 | 2. Async Job System + SSE Progress | 2/2 | Complete   | 2026-03-03 |
 | 3. React Frontend — Single File Flow | 4/4 | Complete   | 2026-03-03 |
-| 4. Options Panel + Batch Conversion | 4/5 | In Progress|  |
+| 4. Options Panel + Batch Conversion | 5/5 | Complete   | 2026-03-03 |
 | 5. Production Docker Compose | 0/3 | Not started | - |

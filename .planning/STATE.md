@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T08:06:48Z"
+last_updated: "2026-03-03T19:31:19.883Z"
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 13
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Convertire qualsiasi documento in Markdown pulito con un semplice browser upload, rendendo accessibile la potenza di Docling senza toccare la CLI.
-**Current focus:** Phase 4 — Options Panel + Batch Conversion
+**Current focus:** Phase 5 — Nginx Production Deployment
 
 ## Current Position
 
-Phase: 4 of 5 (Options Panel + Batch Conversion) — IN PROGRESS
-Plan: 4 of 5 in phase 4 — plan 04-04 complete
-Status: Phase 4 Plan 04 complete — useBatchUpload hook, BatchFileRow, BatchList with ZIP download
-Last activity: 2026-03-03 — Phase 4 Plan 04: useBatchUpload + BatchFileRow + BatchList
+Phase: 4 of 5 (Options Panel + Batch Conversion) — COMPLETE
+Plan: 5 of 5 in phase 4 — plan 04-05 complete
+Status: Phase 4 COMPLETE — UploadZone multi-file, App.tsx con OptionsPanel + batch flow, verifica umana approvata
+Last activity: 2026-03-03 — Phase 4 Plan 05: UploadZone multi-file + App.tsx integration
 
-Progress: [█████████░] 85%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Progress: [█████████░] 85%
 | Phase 04-options-panel-batch-conversion P01 | 3 | 3 tasks | 7 files |
 | Phase 04-options-panel-batch-conversion P03 | 6 | 1 tasks | 1 files |
 | Phase 04-options-panel-batch-conversion P04 | 8 | 2 tasks | 4 files |
+| Phase 04-options-panel-batch-conversion P05 | 15 | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion 04-04]: Direct EventSource (not useJobStream) in useBatchUpload — manages streams outside React lifecycle with Map-based deduplication via useRef
 - [Phase 04-options-panel-batch-conversion 04-04]: Sequential uploads in addFiles() loop — simpler, avoids race condition; SSE streams are concurrent (each EventSource independent)
 - [Phase 04-options-panel-batch-conversion 04-04]: retryFile() closes existing EventSource before retry — prevents ghost streams updating state after retry
+- [Phase 04-options-panel-batch-conversion]: Single-file flow usa fetch diretto invece di useUpload per includere ConversionOptions nel FormData
+- [Phase 04-options-panel-batch-conversion]: UploadZone usa onFilesSelected (array) + compact prop per riutilizzo in strip mode
 
 ### Pending Todos
 
@@ -113,5 +116,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 04-04-PLAN.md — useBatchUpload hook, BatchFileRow, BatchList with JSZip ZIP download
+Stopped at: Completed 04-05-PLAN.md — UploadZone multi-file + App.tsx state machine con OptionsPanel e batch flow, verifica umana approvata
 Resume file: None
