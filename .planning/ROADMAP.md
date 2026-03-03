@@ -135,7 +135,7 @@ Plans:
 **Goal:** Redesign visivo completo del frontend: palette emerald come accent, dark mode con toggle nell'header, UploadZone con bordo e glow emerald, ResultViewer con tipografia curata e dark:prose-invert
 **Requirements**: (visual design — no nuovi requirement ID; miglioramento estetico dei componenti esistenti)
 **Depends on:** Phase 6
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 07-01-PLAN.md — CSS vars emerald in index.css, ThemeProvider context, ModeToggle componente
