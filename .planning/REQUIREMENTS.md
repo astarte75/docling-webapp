@@ -23,9 +23,9 @@
 
 ### Output
 
-- [ ] **OUTP-01**: User sees a rendered Markdown preview of the converted document inline in the browser
-- [ ] **OUTP-02**: User can download the converted document as a `.md` file
-- [ ] **OUTP-03**: User can copy the full Markdown content to clipboard with a single click
+- [x] **OUTP-01**: User sees a rendered Markdown preview of the converted document inline in the browser
+- [x] **OUTP-02**: User can download the converted document as a `.md` file
+- [x] **OUTP-03**: User can copy the full Markdown content to clipboard with a single click
 
 ### Configuration
 
@@ -100,9 +100,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UPLD-03 | Phase 3 | Complete |
 | UPLD-04 | Phase 3 | Complete |
 | UPLD-05 | Phase 3 | Complete |
-| OUTP-01 | Phase 3 | Pending |
-| OUTP-02 | Phase 3 | Pending |
-| OUTP-03 | Phase 3 | Pending |
+| OUTP-01 | Phase 3 | Complete |
+| OUTP-02 | Phase 3 | Complete |
+| OUTP-03 | Phase 3 | Complete |
 | CONF-01 | Phase 4 | Pending |
 | CONF-02 | Phase 4 | Pending |
 | CONF-03 | Phase 4 | Pending |
