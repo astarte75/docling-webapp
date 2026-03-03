@@ -7,8 +7,8 @@
 
 ### Upload & File Handling
 
-- [ ] **UPLD-01**: User can drag-and-drop one or more files onto the upload area
-- [ ] **UPLD-02**: User can click to browse and select files from the file system
+- [x] **UPLD-01**: User can drag-and-drop one or more files onto the upload area
+- [x] **UPLD-02**: User can click to browse and select files from the file system
 - [ ] **UPLD-03**: System validates file format client-side and rejects unsupported types with a clear error message (PDF, DOCX, PPTX, XLSX, HTML, PNG, JPEG, TIFF, AsciiDoc)
 - [ ] **UPLD-04**: System enforces a 50MB per-file size limit (configurable via env var) and shows a clear rejection message for oversized files
 - [ ] **UPLD-05**: User sees a progress bar during file upload to the server
@@ -95,8 +95,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONV-03 | Phase 2 | Complete |
 | CONV-04 | Phase 2 | Complete |
 | CONV-05 | Phase 2 | Complete |
-| UPLD-01 | Phase 3 | Pending |
-| UPLD-02 | Phase 3 | Pending |
+| UPLD-01 | Phase 3 | Complete |
+| UPLD-02 | Phase 3 | Complete |
 | UPLD-03 | Phase 3 | Pending |
 | UPLD-04 | Phase 3 | Pending |
 | UPLD-05 | Phase 3 | Pending |
