@@ -67,7 +67,7 @@ export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
 };
 
 /** Status of a single file in a batch conversion */
-export type BatchFileStatus = 'pending' | 'converting' | 'done' | 'error';
+export type BatchFileStatus = 'pending' | 'converting' | 'done' | 'error' | 'cancelled';
 
 /** A single file entry in the batch list, with its snapshot options */
 export interface BatchFile {

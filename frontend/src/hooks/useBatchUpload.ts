@@ -115,6 +115,19 @@ export function useBatchUpload() {
     }
   }, [files, updateItem]);
 
+  // Cancel a single file that is currently converting
+  const cancelFile = useCallback((itemId: string) => {
+    // Guard: only cancel if currently converting — prevents overwriting 'done' in race condition
+    setFiles(prev => {
+      const item = prev.find(f => f.id === itemId);
+      if (!item || item.status !== 'converting') return prev;
+      return prev.map(f => f.id === itemId ? { ...f, status: 'cancelled' as const } : f);
+    });
+    // Close the EventSource regardless of guard (safe: optional chaining handles missing stream)
+    streamsRef.current.get(itemId)?.close();
+    streamsRef.current.delete(itemId);
+  }, []); // No deps — uses functional setFiles form, streamsRef is a ref (stable)
+
   const clearFiles = useCallback(() => {
     // Close all open streams
     streamsRef.current.forEach(es => es.close());
@@ -122,5 +135,5 @@ export function useBatchUpload() {
     setFiles([]);
   }, []);
 
-  return { files, addFiles, retryFile, clearFiles };
+  return { files, addFiles, retryFile, cancelFile, clearFiles };
 }
