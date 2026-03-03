@@ -5,11 +5,12 @@ import os
 import uuid
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Request, UploadFile, status
+from fastapi import FastAPI, Form, HTTPException, Request, UploadFile, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse
+from typing import Optional
 
-from adapter import DoclingAdapter
+from adapter import ConversionOptions, DoclingAdapter
 from config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
 from job_store import Job, conversion_worker
 
@@ -72,8 +73,23 @@ async def health() -> dict:
 
 
 @app.post("/convert")
-async def convert(request: Request, file: UploadFile) -> JSONResponse:
+async def convert(
+    request: Request,
+    file: UploadFile,
+    ocr_mode: str = Form(default="auto"),
+    table_detection: bool = Form(default=True),
+    page_from: Optional[int] = Form(default=None),
+    page_to: Optional[int] = Form(default=None),
+    ocr_languages: Optional[str] = Form(default=None),  # comma-separated lang codes
+) -> JSONResponse:
     """Accept a PDF upload and enqueue it for async conversion.
+
+    Optional form fields for per-job conversion options:
+        ocr_mode: "auto" (default) | "on" | "off"
+        table_detection: bool (default True)
+        page_from: 1-based start page (default: first page)
+        page_to: 1-based end page (default: last page)
+        ocr_languages: comma-separated EasyOCR language codes (e.g. "it,en")
 
     Returns:
         202: {"job_id": "<uuid>"} — job accepted, connect to SSE stream for progress
@@ -109,8 +125,17 @@ async def convert(request: Request, file: UploadFile) -> JSONResponse:
     with open(tmp_path, "wb") as f:
         f.write(content)
 
+    # Build per-job conversion options from form fields
+    options = ConversionOptions(
+        ocr_mode=ocr_mode,
+        table_detection=table_detection,
+        page_from=page_from,
+        page_to=page_to,
+        ocr_languages=ocr_languages.split(",") if ocr_languages else [],
+    )
+
     # Register job and enqueue
-    job = Job(job_id=job_id, tmp_path=tmp_path)
+    job = Job(job_id=job_id, tmp_path=tmp_path, options=options)
     request.app.state.jobs[job_id] = job
     await request.app.state.dispatch_queue.put(job_id)
 
