@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T06:51:35.524Z"
+last_updated: "2026-03-03T06:53:55Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 Phase: 3 of 5 (React Frontend — Single File Flow) — IN PROGRESS
-Plan: 1 of 4 in phase 3 — plan 03-01 complete
-Status: Phase 3 plan 01 complete — React frontend scaffold with Tailwind v4, shadcn/ui, and shared type contracts
-Last activity: 2026-03-03 — Phase 3 Plan 01: Vite+React+TS scaffold, Tailwind v4, shadcn/ui, types/job.ts
+Plan: 2 of 4 in phase 3 — plan 03-02 complete
+Status: Phase 3 plan 02 complete — useUpload, useJobStream hooks and UploadZone component
+Last activity: 2026-03-03 — Phase 3 Plan 02: useUpload, useJobStream, UploadZone
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [████░░░░░░] 40%
 | Phase 02-async-job-system-sse-progress P01 | 3 | 2 tasks | 4 files |
 | Phase 02-async-job-system-sse-progress P02 | 30 | 2 tasks | 1 files |
 | Phase 03-react-frontend-single-file-flow P01 | 4 | 2 tasks | 20 files |
+| Phase 03-react-frontend-single-file-flow P02 | 1 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase 02-async-job-system-sse-progress]: StreamingResponse instead of EventSourceResponse for SSE — EventSourceResponse prevents HTTPException(404) from propagating before stream start
 - [Phase 03-react-frontend-single-file-flow]: shadcn init requires path alias in tsconfig.json root — added compilerOptions.paths alongside project references
 - [Phase 03-react-frontend-single-file-flow]: AppPhase discriminated union for exhaustive UI state modeling (idle/uploading/converting/success/error)
+- [Phase 03-react-frontend-single-file-flow 03-02]: Callbacks via useRef in useJobStream — avoids infinite re-renders from inline function props
+- [Phase 03-react-frontend-single-file-flow 03-02]: No upload progress bar — UploadZone hands file to parent via onFileSelected; App manages state machine
 
 ### Pending Todos
 
@@ -89,5 +92,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 03-01-PLAN.md — React frontend scaffold with Tailwind v4, shadcn/ui, and shared type contracts
+Stopped at: Completed 03-02-PLAN.md — useUpload, useJobStream hooks and UploadZone component
 Resume file: None
