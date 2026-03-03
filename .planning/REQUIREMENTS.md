@@ -112,10 +112,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BTCH-02 | Phase 4 | Complete |
 | BTCH-03 | Phase 4 | Complete |
 | BTCH-04 | Phase 4 | Complete |
+| UX-CANCEL-SINGLE | Phase 6 | Complete |
+| UX-CANCEL-BATCH | Phase 6 | Complete |
+| UX-HEADER-NAV | Phase 6 | Complete |
+| UX-RESET-SUCCESS | Phase 6 | Complete |
 
 **Coverage:**
-- v1 requirements: 25 total
-- Mapped to phases: 25
+- v1 requirements: 29 total
+- Mapped to phases: 29
 - Unmapped: 0 ✓
 
 ---
