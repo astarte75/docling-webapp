@@ -121,13 +121,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 ### Phase 6: cancel-and-ux-fixes
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Add cancellation controls for in-progress conversions, clickable header for global reset, and "Nuova conversione" button in success state — pure frontend UX controls, no backend changes
+**Requirements**: UX-CANCEL-SINGLE, UX-CANCEL-BATCH, UX-HEADER-NAV, UX-RESET-SUCCESS
 **Depends on:** Phase 5
-**Plans:** 0 plans
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 6 to break down)
+- [ ] 06-01-PLAN.md — Extend types, add cancelFile hook, update ConversionProgress/BatchFileRow/BatchList/App.tsx
+- [ ] 06-02-PLAN.md — Human verification of all four UX controls
 
 ### Phase 7: visual-redesign-frontend-design
 
