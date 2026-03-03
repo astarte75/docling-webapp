@@ -18,8 +18,9 @@ import {
 
 import {
   SUPPORTED_OCR_LANGUAGES,
+  OCR_ENGINES,
 } from '@/types/job';
-import type { ConversionOptions, OcrMode } from '@/types/job';
+import type { ConversionOptions, OcrMode, OcrEngine } from '@/types/job';
 
 interface OptionsPanelProps {
   value: ConversionOptions;
@@ -110,9 +111,31 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             />
           </div>
 
+          {/* OCR engine select */}
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm text-muted-foreground shrink-0">Motore OCR</span>
+            <Select
+              value={value.ocrEngine}
+              onValueChange={(v) => onChange({ ...value, ocrEngine: v as OcrEngine })}
+            >
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {OCR_ENGINES.map((engine) => (
+                  <SelectItem key={engine.value} value={engine.value}>
+                    {engine.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* OCR language select */}
           <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-muted-foreground shrink-0">Lingua OCR</span>
+            <span className="text-sm text-muted-foreground shrink-0">
+              Lingua OCR <span className="text-xs opacity-60">(EasyOCR)</span>
+            </span>
             <Select
               value={selectedLanguage}
               onValueChange={(v) =>
