@@ -154,17 +154,10 @@ export default function App() {
         {/* Success state — single file */}
         {state.phase === 'success' && (
           <div className="rounded-lg border">
-            <div className="border-b px-4 py-3 flex items-center justify-between">
+            <div className="border-b px-4 py-3">
               <p className="text-sm font-medium text-muted-foreground">
                 Conversione completata
               </p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setState({ phase: 'idle' })}
-              >
-                Nuova conversione
-              </Button>
             </div>
             <ResultViewer
               markdown={state.markdown}
