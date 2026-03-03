@@ -147,7 +147,7 @@ Plans:
 **Goal:** Expose OCR engine selection (Auto, EasyOCR, RapidOCR, Tesseract) in the UI and backend; install Tesseract and RapidOCR in the Docker image; produce a written benchmark document
 **Requirements**: (feature addition — no new requirement IDs; extends CONF-05 pattern)
 **Depends on:** Phase 7
-**Plans:** 1/4 plans executed
+**Plans:** 3/4 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — Backend engine factory in adapter.py, ocr_engine Form param in main.py, Dockerfile + requirements.txt
