@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T07:17:32.352Z"
+last_updated: "2026-03-03T07:22:00.000Z"
 progress:
-  total_phases: 3
+  total_phases: 5
   completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 13
+  completed_plans: 9
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Convertire qualsiasi documento in Markdown pulito con un semplice browser upload, rendendo accessibile la potenza di Docling senza toccare la CLI.
-**Current focus:** Phase 3 — React Frontend Single File Flow
+**Current focus:** Phase 4 — Options Panel + Batch Conversion
 
 ## Current Position
 
-Phase: 3 of 5 (React Frontend — Single File Flow) — COMPLETE
-Plan: 4 of 4 in phase 3 — plan 03-04 complete
-Status: Phase 3 complete — App.tsx state machine, full end-to-end flow verified in browser
-Last activity: 2026-03-03 — Phase 3 Plan 04: App.tsx state machine integration
+Phase: 4 of 5 (Options Panel + Batch Conversion) — IN PROGRESS
+Plan: 2 of 5 in phase 4 — plan 04-02 complete
+Status: Phase 4 Plan 02 complete — TypeScript types and frontend dependencies installed
+Last activity: 2026-03-03 — Phase 4 Plan 02: Types and dependencies for batch conversion
 
-Progress: [████████░░] 75%
+Progress: [█████████░] 80%
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Progress: [████████░░] 75%
 | Phase 03-react-frontend-single-file-flow P02 | 1 | 2 tasks | 3 files |
 | Phase 03-react-frontend-single-file-flow P03 | 5 | 2 tasks | 2 files |
 | Phase 03-react-frontend-single-file-flow P04 | 20 | 2 tasks | 2 files |
+| Phase 04-options-panel-batch-conversion P02 | 5 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,9 @@ Recent decisions affecting current work:
 - [Phase 03-react-frontend-single-file-flow]: Copy feedback via useState+setTimeout 2s, no toast — no external dependency
 - [Phase 03-react-frontend-single-file-flow]: Vite proxy target corrected to localhost:3000 (docker-compose host port) — was incorrectly set to localhost:8000 (container internal port)
 - [Phase 03-react-frontend-single-file-flow]: jobId=null passed to useJobStream in all non-converting phases — prevents spurious SSE connections
+- [Phase 04-options-panel-batch-conversion 04-02]: ConversionOptions uses null for pageFrom/pageTo to represent "use default" — avoids magic numbers
+- [Phase 04-options-panel-batch-conversion 04-02]: Options snapshot captured at drop time, immutable per BatchFile — each file carries its own conversion config
+- [Phase 04-options-panel-batch-conversion 04-02]: BatchFile.id uses crypto.randomUUID() client-generated — no server round-trip needed for list key
 
 ### Pending Todos
 
@@ -98,5 +102,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 03-04-PLAN.md — App.tsx state machine integration, all UPLD and OUTP requirements verified
+Stopped at: Completed 04-02-PLAN.md — TypeScript type contracts for batch conversion installed, jszip and shadcn components ready
 Resume file: None

@@ -37,10 +37,10 @@
 
 ### Batch Conversion
 
-- [ ] **BTCH-01**: User can upload multiple files in a single session from the same upload area
-- [ ] **BTCH-02**: User sees individual conversion status for each file in the batch (pending / converting / done / error)
+- [x] **BTCH-01**: User can upload multiple files in a single session from the same upload area
+- [x] **BTCH-02**: User sees individual conversion status for each file in the batch (pending / converting / done / error)
 - [ ] **BTCH-03**: System converts batch files in parallel up to a maximum of 2 concurrent jobs (configurable via env var)
-- [ ] **BTCH-04**: User can download all successfully converted files as a single `.zip` archive
+- [x] **BTCH-04**: User can download all successfully converted files as a single `.zip` archive
 
 ### Infrastructure
 
@@ -108,10 +108,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONF-03 | Phase 4 | Pending |
 | CONF-04 | Phase 4 | Pending |
 | CONF-05 | Phase 4 | Pending |
-| BTCH-01 | Phase 4 | Pending |
-| BTCH-02 | Phase 4 | Pending |
+| BTCH-01 | Phase 4 | Complete |
+| BTCH-02 | Phase 4 | Complete |
 | BTCH-03 | Phase 4 | Pending |
-| BTCH-04 | Phase 4 | Pending |
+| BTCH-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 25 total
