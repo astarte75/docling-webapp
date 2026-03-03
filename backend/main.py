@@ -77,6 +77,7 @@ async def convert(
     request: Request,
     file: UploadFile,
     ocr_mode: str = Form(default="auto"),
+    ocr_engine: str = Form(default="auto"),  # "auto" | "easyocr" | "rapidocr" | "tesseract"
     table_detection: bool = Form(default=True),
     page_from: Optional[int] = Form(default=None),
     page_to: Optional[int] = Form(default=None),
@@ -86,6 +87,7 @@ async def convert(
 
     Optional form fields for per-job conversion options:
         ocr_mode: "auto" (default) | "on" | "off"
+        ocr_engine: "auto" (default) | "easyocr" | "rapidocr" | "tesseract"
         table_detection: bool (default True)
         page_from: 1-based start page (default: first page)
         page_to: 1-based end page (default: last page)
@@ -128,6 +130,7 @@ async def convert(
     # Build per-job conversion options from form fields
     options = ConversionOptions(
         ocr_mode=ocr_mode,
+        ocr_engine=ocr_engine,
         table_detection=table_detection,
         page_from=page_from,
         page_to=page_to,
