@@ -77,7 +77,23 @@ export default function App() {
 
         {/* Header */}
         <header className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Docling Webapp</h1>
+          <h1
+            className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
+            onClick={() => {
+              batchHook.clearFiles(); // closes all batch EventSources + clears batch state
+              setState({ phase: 'idle' }); // sets jobId=null → triggers useJobStream useEffect cleanup
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                batchHook.clearFiles();
+                setState({ phase: 'idle' });
+              }
+            }}
+          >
+            Docling Webapp
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Convert documents to Markdown
           </p>
@@ -126,7 +142,11 @@ export default function App() {
         </div>
 
         {/* Converting state — single file */}
-        {isConverting && <ConversionProgress />}
+        {isConverting && (
+          <ConversionProgress
+            onCancel={() => setState({ phase: 'idle' })}
+          />
+        )}
 
         {/* Error state — single file */}
         {state.phase === 'error' && (
@@ -146,10 +166,17 @@ export default function App() {
         {/* Success state — single file */}
         {state.phase === 'success' && (
           <div className="rounded-lg border">
-            <div className="border-b px-4 py-3">
+            <div className="border-b px-4 py-3 flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">
                 Conversione completata
               </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setState({ phase: 'idle' })}
+              >
+                Nuova conversione
+              </Button>
             </div>
             <ResultViewer
               markdown={state.markdown}
@@ -163,6 +190,7 @@ export default function App() {
           <BatchList
             files={batchHook.files}
             onRetry={batchHook.retryFile}
+            onCancel={batchHook.cancelFile}
           />
         )}
 
