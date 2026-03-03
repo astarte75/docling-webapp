@@ -144,13 +144,16 @@ Plans:
 
 ### Phase 8: OCR Engine Research and Selection
 
-**Goal:** Research OCR engine alternatives to Tesseract (e.g. EasyOCR, PaddleOCR, Surya, cloud-based), evaluate accuracy/speed/licensing trade-offs, and expose engine selection in the UI and backend so users can pick the best engine for their documents
-**Requirements**: TBD
+**Goal:** Expose OCR engine selection (Auto, EasyOCR, RapidOCR, Tesseract) in the UI and backend; install Tesseract and RapidOCR in the Docker image; produce a written benchmark document
+**Requirements**: (feature addition — no new requirement IDs; extends CONF-05 pattern)
 **Depends on:** Phase 7
-**Plans:** 0 plans
+**Plans:** 4 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+- [ ] 08-01-PLAN.md — Backend engine factory in adapter.py, ocr_engine Form param in main.py, Dockerfile + requirements.txt
+- [ ] 08-02-PLAN.md — Frontend OcrEngine type in job.ts, engine Select in OptionsPanel, ocrEngine wired to FormData
+- [ ] 08-03-PLAN.md — Written benchmark document (08-BENCHMARK.md)
+- [ ] 08-04-PLAN.md — Human verification checkpoint
 
 ### Phase 9: Multi-arch Docker Compose Production Build
 
