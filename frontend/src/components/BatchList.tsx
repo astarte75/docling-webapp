@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 interface BatchListProps {
   files: BatchFile[];
   onRetry: (id: string) => void;
+  onCancel: (id: string) => void;
 }
 
 async function downloadBatchZip(files: BatchFile[]): Promise<void> {
@@ -27,7 +28,7 @@ async function downloadBatchZip(files: BatchFile[]): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
-export function BatchList({ files, onRetry }: BatchListProps) {
+export function BatchList({ files, onRetry, onCancel }: BatchListProps) {
   const doneCount = files.filter(f => f.status === 'done').length;
   const hasActive = files.some(f => f.status === 'pending' || f.status === 'converting');
 
@@ -36,7 +37,7 @@ export function BatchList({ files, onRetry }: BatchListProps) {
       {/* File list */}
       <div className="divide-y">
         {files.map(item => (
-          <BatchFileRow key={item.id} item={item} onRetry={onRetry} />
+          <BatchFileRow key={item.id} item={item} onRetry={onRetry} onCancel={onCancel} />
         ))}
       </div>
 

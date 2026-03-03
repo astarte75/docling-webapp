@@ -1,6 +1,6 @@
 import type { BatchFile } from '@/types/job';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Status badge colors
@@ -9,14 +9,16 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   converting: { label: 'Conversione', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' },
   done:       { label: 'Completato',  className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' },
   error:      { label: 'Errore',      className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' },
+  cancelled:  { label: 'Annullato',   className: 'bg-muted text-muted-foreground' },
 };
 
 interface BatchFileRowProps {
   item: BatchFile;
   onRetry: (id: string) => void;
+  onCancel: (id: string) => void;
 }
 
-export function BatchFileRow({ item, onRetry }: BatchFileRowProps) {
+export function BatchFileRow({ item, onRetry, onCancel }: BatchFileRowProps) {
   const badge = STATUS_BADGE[item.status];
 
   return (
@@ -33,6 +35,19 @@ export function BatchFileRow({ item, onRetry }: BatchFileRowProps) {
         )}
         {badge.label}
       </div>
+
+      {/* Cancel button — only on converting */}
+      {item.status === 'converting' && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0"
+          onClick={() => onCancel(item.id)}
+          aria-label="Annulla"
+        >
+          <X className="h-3 w-3" />
+        </Button>
+      )}
 
       {/* Error message inline (visible only on error) */}
       {item.status === 'error' && item.errorMessage && (
