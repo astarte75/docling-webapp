@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T07:59:50.881Z"
+last_updated: "2026-03-03T08:09:00Z"
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 13
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 Phase: 4 of 5 (Options Panel + Batch Conversion) — IN PROGRESS
-Plan: 2 of 5 in phase 4 — plan 04-02 complete
-Status: Phase 4 Plan 02 complete — TypeScript types and frontend dependencies installed
-Last activity: 2026-03-03 — Phase 4 Plan 02: Types and dependencies for batch conversion
+Plan: 4 of 5 in phase 4 — plan 04-04 complete
+Status: Phase 4 Plan 04 complete — useBatchUpload hook, BatchFileRow, BatchList with ZIP download
+Last activity: 2026-03-03 — Phase 4 Plan 04: useBatchUpload + BatchFileRow + BatchList
 
-Progress: [█████████░] 80%
+Progress: [█████████░] 85%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [█████████░] 80%
 | Phase 03-react-frontend-single-file-flow P04 | 20 | 2 tasks | 2 files |
 | Phase 04-options-panel-batch-conversion P02 | 5 | 2 tasks | 8 files |
 | Phase 04-options-panel-batch-conversion P01 | 3 | 3 tasks | 7 files |
+| Phase 04-options-panel-batch-conversion P04 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,9 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion]: Per-request DocumentConverter: Docling bundles PipelineOptions at construction time, so singleton cannot support per-job options
 - [Phase 04-options-panel-batch-conversion]: Semaphore + create_task fire-and-forget: main loop non-blocking, Semaphore inside process_job limits concurrent Docling calls to MAX_CONCURRENT_JOBS
 - [Phase 04-options-panel-batch-conversion]: ocr_languages as comma-separated Form string: HTML multipart doesn't natively support repeated field names in all clients
+- [Phase 04-options-panel-batch-conversion 04-04]: Direct EventSource (not useJobStream) in useBatchUpload — manages streams outside React lifecycle with Map-based deduplication via useRef
+- [Phase 04-options-panel-batch-conversion 04-04]: Sequential uploads in addFiles() loop — simpler, avoids race condition; SSE streams are concurrent (each EventSource independent)
+- [Phase 04-options-panel-batch-conversion 04-04]: retryFile() closes existing EventSource before retry — prevents ghost streams updating state after retry
 
 ### Pending Todos
 
@@ -106,5 +110,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 04-01-PLAN.md — Backend conversion options: ConversionOptions dataclass, semaphore worker, POST /convert form fields
+Stopped at: Completed 04-04-PLAN.md — useBatchUpload hook, BatchFileRow, BatchList with JSZip ZIP download
 Resume file: None
