@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T21:37:44.770Z"
+last_updated: "2026-03-03T21:37:48.371Z"
 progress:
   total_phases: 8
   completed_phases: 6
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 Phase: 8 of 9 (OCR Engine Research and Selection) — IN PROGRESS
-Plan: 3 of 4 in phase 8 — plan 08-03 complete
-Status: Phase 8 Plan 03 COMPLETE — OCR engine benchmark document written
-Last activity: 2026-03-03 — Phase 8 Plan 03: Written benchmark comparing Auto/EasyOCR/RapidOCR/Tesseract with per-use-case recommendations
+Plan: 4 of 4 in phase 8 — plan 08-01 complete (all 4 plans executed)
+Status: Phase 8 Plan 01 COMPLETE — OCR engine factory backend implemented
+Last activity: 2026-03-03 — Phase 8 Plan 01: Four-engine OCR factory (auto/easyocr/rapidocr/tesseract) in adapter.py with per-job /convert Form selection
 
 Progress: [█████████░] 94%
 
@@ -121,6 +121,7 @@ Recent decisions affecting current work:
 - [Phase 08-ocr-engine-research-and-selection]: Language label updated with (EasyOCR) hint to clarify which engines use the language setting
 - [Phase 08-ocr-engine-research-and-selection 08-03]: EasyOCR recommended for scanned PDFs/multilingual; RapidOCR for fast CPU-only; Auto as default — see 08-BENCHMARK.md
 - [Phase 08-ocr-engine-research-and-selection 08-03]: ocr_languages field is EasyOCR-only — must be documented in UI; applying it to other engines has no effect
+- [Phase 08-ocr-engine-research-and-selection]: Engine factory dict (_OCR_ENGINE_CLASSES) for O(1) OCR engine lookup; ocr_languages restricted to EasyOCR only; Tesseract apt block before pip install; tesserocr C-API requires libtesseract-dev at build time
 
 ### Roadmap Evolution
 
