@@ -7,6 +7,8 @@ import { ConversionProgress } from '@/components/ConversionProgress';
 import { ResultViewer } from '@/components/ResultViewer';
 import { BatchList } from '@/components/BatchList';
 import { Button } from '@/components/ui/button';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ModeToggle } from '@/components/mode-toggle';
 import type { AppPhase, ConversionOptions } from '@/types/job';
 import { DEFAULT_CONVERSION_OPTIONS } from '@/types/job';
 
@@ -72,29 +74,36 @@ export default function App() {
   const isBatch = state.phase === 'batch-active' || state.phase === 'batch-complete';
 
   return (
+    <ThemeProvider defaultTheme="system" storageKey="docling-theme">
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-8">
 
         {/* Header */}
-        <header className="mb-8 text-center">
-          <h1
-            className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
-            onClick={() => {
-              batchHook.clearFiles(); // closes all batch EventSources + clears batch state
-              setState({ phase: 'idle' }); // sets jobId=null → triggers useJobStream useEffect cleanup
-            }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                batchHook.clearFiles();
-                setState({ phase: 'idle' });
-              }
-            }}
-          >
-            Docling Webapp
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <header className="mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex-1" />
+            <h1
+              className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
+              onClick={() => {
+                batchHook.clearFiles(); // closes all batch EventSources + clears batch state
+                setState({ phase: 'idle' }); // sets jobId=null → triggers useJobStream useEffect cleanup
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  batchHook.clearFiles();
+                  setState({ phase: 'idle' });
+                }
+              }}
+            >
+              Docling Webapp
+            </h1>
+            <div className="flex-1 flex justify-end">
+              <ModeToggle />
+            </div>
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground text-center">
             Convert documents to Markdown
           </p>
         </header>
@@ -177,5 +186,6 @@ export default function App() {
 
       </div>
     </div>
+    </ThemeProvider>
   );
 }
