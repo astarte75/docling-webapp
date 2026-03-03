@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T08:09:00Z"
+last_updated: "2026-03-03T08:06:48Z"
 progress:
   total_phases: 4
   completed_phases: 3
@@ -58,6 +58,7 @@ Progress: [█████████░] 85%
 | Phase 03-react-frontend-single-file-flow P04 | 20 | 2 tasks | 2 files |
 | Phase 04-options-panel-batch-conversion P02 | 5 | 2 tasks | 8 files |
 | Phase 04-options-panel-batch-conversion P01 | 3 | 3 tasks | 7 files |
+| Phase 04-options-panel-batch-conversion P03 | 6 | 1 tasks | 1 files |
 | Phase 04-options-panel-batch-conversion P04 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
@@ -93,6 +94,8 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion]: Per-request DocumentConverter: Docling bundles PipelineOptions at construction time, so singleton cannot support per-job options
 - [Phase 04-options-panel-batch-conversion]: Semaphore + create_task fire-and-forget: main loop non-blocking, Semaphore inside process_job limits concurrent Docling calls to MAX_CONCURRENT_JOBS
 - [Phase 04-options-panel-batch-conversion]: ocr_languages as comma-separated Form string: HTML multipart doesn't natively support repeated field names in all clients
+- [Phase 04-options-panel-batch-conversion 04-03]: Radix Select.Item does not accept empty string as value — use __none__ sentinel for "Qualsiasi (default)" option
+- [Phase 04-options-panel-batch-conversion 04-03]: Single language select (not multi-select) — ocrLanguages array contains 0 or 1 elements for backend compatibility
 - [Phase 04-options-panel-batch-conversion 04-04]: Direct EventSource (not useJobStream) in useBatchUpload — manages streams outside React lifecycle with Map-based deduplication via useRef
 - [Phase 04-options-panel-batch-conversion 04-04]: Sequential uploads in addFiles() loop — simpler, avoids race condition; SSE streams are concurrent (each EventSource independent)
 - [Phase 04-options-panel-batch-conversion 04-04]: retryFile() closes existing EventSource before retry — prevents ghost streams updating state after retry
