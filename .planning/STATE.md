@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T07:22:00.000Z"
+last_updated: "2026-03-03T07:59:50.881Z"
 progress:
-  total_phases: 5
+  total_phases: 4
   completed_phases: 3
   total_plans: 13
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -57,6 +57,7 @@ Progress: [█████████░] 80%
 | Phase 03-react-frontend-single-file-flow P03 | 5 | 2 tasks | 2 files |
 | Phase 03-react-frontend-single-file-flow P04 | 20 | 2 tasks | 2 files |
 | Phase 04-options-panel-batch-conversion P02 | 5 | 2 tasks | 8 files |
+| Phase 04-options-panel-batch-conversion P01 | 3 | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,9 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion 04-02]: ConversionOptions uses null for pageFrom/pageTo to represent "use default" — avoids magic numbers
 - [Phase 04-options-panel-batch-conversion 04-02]: Options snapshot captured at drop time, immutable per BatchFile — each file carries its own conversion config
 - [Phase 04-options-panel-batch-conversion 04-02]: BatchFile.id uses crypto.randomUUID() client-generated — no server round-trip needed for list key
+- [Phase 04-options-panel-batch-conversion]: Per-request DocumentConverter: Docling bundles PipelineOptions at construction time, so singleton cannot support per-job options
+- [Phase 04-options-panel-batch-conversion]: Semaphore + create_task fire-and-forget: main loop non-blocking, Semaphore inside process_job limits concurrent Docling calls to MAX_CONCURRENT_JOBS
+- [Phase 04-options-panel-batch-conversion]: ocr_languages as comma-separated Form string: HTML multipart doesn't natively support repeated field names in all clients
 
 ### Pending Todos
 
@@ -102,5 +106,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 04-02-PLAN.md — TypeScript type contracts for batch conversion installed, jszip and shadcn components ready
+Stopped at: Completed 04-01-PLAN.md — Backend conversion options: ConversionOptions dataclass, semaphore worker, POST /convert form fields
 Resume file: None

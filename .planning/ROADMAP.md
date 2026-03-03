@@ -116,5 +116,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Backend Core + Docker Foundation | 2/2 | Complete   | 2026-03-02 |
 | 2. Async Job System + SSE Progress | 2/2 | Complete   | 2026-03-03 |
 | 3. React Frontend — Single File Flow | 4/4 | Complete   | 2026-03-03 |
-| 4. Options Panel + Batch Conversion | 0/5 | Not started | - |
+| 4. Options Panel + Batch Conversion | 2/5 | In Progress|  |
 | 5. Production Docker Compose | 0/3 | Not started | - |

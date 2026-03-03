@@ -29,17 +29,17 @@
 
 ### Configuration
 
-- [ ] **CONF-01**: User can set OCR mode (auto / on / off) from the main interface with a simple control
+- [x] **CONF-01**: User can set OCR mode (auto / on / off) from the main interface with a simple control
 - [ ] **CONF-02**: User can expand/collapse an advanced options panel for additional Docling settings
-- [ ] **CONF-03**: User can toggle table detection on/off in the advanced panel
-- [ ] **CONF-04**: User can set a page range (from / to) for PDF documents in the advanced panel
-- [ ] **CONF-05**: User can select OCR language from a list of supported EasyOCR languages in the advanced panel
+- [x] **CONF-03**: User can toggle table detection on/off in the advanced panel
+- [x] **CONF-04**: User can set a page range (from / to) for PDF documents in the advanced panel
+- [x] **CONF-05**: User can select OCR language from a list of supported EasyOCR languages in the advanced panel
 
 ### Batch Conversion
 
 - [x] **BTCH-01**: User can upload multiple files in a single session from the same upload area
 - [x] **BTCH-02**: User sees individual conversion status for each file in the batch (pending / converting / done / error)
-- [ ] **BTCH-03**: System converts batch files in parallel up to a maximum of 2 concurrent jobs (configurable via env var)
+- [x] **BTCH-03**: System converts batch files in parallel up to a maximum of 2 concurrent jobs (configurable via env var)
 - [x] **BTCH-04**: User can download all successfully converted files as a single `.zip` archive
 
 ### Infrastructure
@@ -103,14 +103,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUTP-01 | Phase 3 | Complete |
 | OUTP-02 | Phase 3 | Complete |
 | OUTP-03 | Phase 3 | Complete |
-| CONF-01 | Phase 4 | Pending |
+| CONF-01 | Phase 4 | Complete |
 | CONF-02 | Phase 4 | Pending |
-| CONF-03 | Phase 4 | Pending |
-| CONF-04 | Phase 4 | Pending |
-| CONF-05 | Phase 4 | Pending |
+| CONF-03 | Phase 4 | Complete |
+| CONF-04 | Phase 4 | Complete |
+| CONF-05 | Phase 4 | Complete |
 | BTCH-01 | Phase 4 | Complete |
 | BTCH-02 | Phase 4 | Complete |
-| BTCH-03 | Phase 4 | Pending |
+| BTCH-03 | Phase 4 | Complete |
 | BTCH-04 | Phase 4 | Complete |
 
 **Coverage:**
