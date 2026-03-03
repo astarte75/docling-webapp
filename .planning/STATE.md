@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-03T20:50:17.562Z"
+last_updated: "2026-03-03T21:36:32.298Z"
 progress:
   total_phases: 8
   completed_phases: 6
-  total_plans: 18
-  completed_plans: 18
+  total_plans: 22
+  completed_plans: 19
 ---
 
 # Project State
@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 7 of 9 (Visual Redesign Frontend Design) — COMPLETE
-Plan: 3 of 3 in phase 7 — plan 07-03 complete
-Status: Phase 7 COMPLETE — human visual verification approved, emerald redesign signed off
-Last activity: 2026-03-03 — Phase 7 Plan 03: Human visual verification checkpoint approved
+Phase: 8 of 9 (OCR Engine Research and Selection) — IN PROGRESS
+Plan: 2 of 4 in phase 8 — plan 08-02 complete
+Status: Phase 8 Plan 02 COMPLETE — OCR engine frontend selector implemented
+Last activity: 2026-03-03 — Phase 8 Plan 02: OCR engine Select in OptionsPanel, types updated, FormData wired
 
 Progress: [█████████░] 94%
 
@@ -66,6 +66,7 @@ Progress: [█████████░] 94%
 | Phase 07-visual-redesign-frontend-design P01 | 2 | 2 tasks | 3 files |
 | Phase 07-visual-redesign-frontend-design P02 | 8 | 2 tasks | 3 files |
 | Phase 07-visual-redesign-frontend-design P03 | 5 | 2 tasks | 0 files |
+| Phase 08-ocr-engine-research-and-selection P02 | 8 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,9 @@ Recent decisions affecting current work:
 - [Phase 07-visual-redesign-frontend-design]: ThemeProvider storageKey 'docling-theme' fixed, ModeToggle cycles only light/dark
 - [Phase 07-visual-redesign-frontend-design]: Header flex spacer pattern keeps title centered with ModeToggle at right
 - [Phase 07-visual-redesign-frontend-design]: Visual redesign approved by user: emerald palette, dark mode toggle, UploadZone glow, ResultViewer typography all confirmed correct
+- [Phase 08-ocr-engine-research-and-selection]: OcrEngine type co-located with OcrMode in types/job.ts — keeps OCR-related types together
+- [Phase 08-ocr-engine-research-and-selection]: Engine Select placed above language Select in advanced collapsible — engine choice is broader and more impactful
+- [Phase 08-ocr-engine-research-and-selection]: Language label updated with (EasyOCR) hint to clarify which engines use the language setting
 
 ### Roadmap Evolution
 
