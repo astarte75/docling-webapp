@@ -1,4 +1,5 @@
-import { useDropzone, FileRejection, ErrorCode } from 'react-dropzone';
+import { useDropzone, ErrorCode } from 'react-dropzone';
+import type { FileRejection } from 'react-dropzone';
 import { useState } from 'react';
 import { UploadCloud } from 'lucide-react';
 
