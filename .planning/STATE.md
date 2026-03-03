@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 4 of 5 (Options Panel + Batch Conversion) — COMPLETE
-Plan: 5 of 5 in phase 4 — plan 04-05 complete
-Status: Phase 4 COMPLETE — UploadZone multi-file, App.tsx con OptionsPanel + batch flow, verifica umana approvata
-Last activity: 2026-03-03 — Phase 4 Plan 05: UploadZone multi-file + App.tsx integration
+Phase: 6 of 9 (Cancel and UX Fixes) — IN PROGRESS
+Plan: 1 of 1 in phase 6 — plan 06-01 complete
+Status: Phase 6 Plan 01 COMPLETE — cancel controls, clickable header, Nuova conversione button
+Last activity: 2026-03-03 — Phase 6 Plan 01: Cancel and UX fixes
 
 Progress: [██████████] 100%
 
@@ -61,6 +61,7 @@ Progress: [██████████] 100%
 | Phase 04-options-panel-batch-conversion P03 | 6 | 1 tasks | 1 files |
 | Phase 04-options-panel-batch-conversion P04 | 8 | 2 tasks | 4 files |
 | Phase 04-options-panel-batch-conversion P05 | 15 | 3 tasks | 2 files |
+| Phase 06-cancel-and-ux-fixes P01 | 2 | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -102,11 +103,16 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion 04-04]: retryFile() closes existing EventSource before retry — prevents ghost streams updating state after retry
 - [Phase 04-options-panel-batch-conversion]: Single-file flow usa fetch diretto invece di useUpload per includere ConversionOptions nel FormData
 - [Phase 04-options-panel-batch-conversion]: UploadZone usa onFilesSelected (array) + compact prop per riutilizzo in strip mode
+- [Phase 06-cancel-and-ux-fixes]: cancelFile usa functional setFiles con guard per evitare race condition con evento SSE completed
+- [Phase 06-cancel-and-ux-fixes]: setState({ phase: 'idle' }) sufficiente per chiudere SSE — useJobStream cleanup gestisce es.close() automaticamente
+- [Phase 06-cancel-and-ux-fixes]: Header reset chiama clearFiles() + setState idle atomicamente per coprire qualsiasi fase dell'app
 
 ### Roadmap Evolution
 
 - Phase 06 added: cancel-and-ux-fixes — cancel conversione in corso, navigazione logo→homepage, reset upload zone post-conversione
 - Phase 07 added: visual-redesign-frontend-design — redesign estetico completo con font, colori, animazioni e microinterazioni (frontend-design skill)
+- Phase 08 added: OCR Engine Research and Selection — ricerca alternative OCR migliori rispetto a Tesseract, implementazione selezione motore OCR nell'interfaccia
+- Phase 09 added: Multi-arch Docker Compose Production Build — build multi-architettura (amd64/arm64) per deploy su server Linux x86, docker-compose unico per backend + frontend
 
 ### Pending Todos
 
@@ -121,5 +127,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 04-05-PLAN.md — UploadZone multi-file + App.tsx state machine con OptionsPanel e batch flow, verifica umana approvata
+Stopped at: Completed 06-01-PLAN.md — Cancel controls, clickable header, Nuova conversione button, per-item batch cancel
 Resume file: None

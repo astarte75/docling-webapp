@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 **Goal:** Add cancellation controls for in-progress conversions, clickable header for global reset, and "Nuova conversione" button in success state — pure frontend UX controls, no backend changes
 **Requirements**: UX-CANCEL-SINGLE, UX-CANCEL-BATCH, UX-HEADER-NAV, UX-RESET-SUCCESS
 **Depends on:** Phase 5
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 06-01-PLAN.md — Extend types, add cancelFile hook, update ConversionProgress/BatchFileRow/BatchList/App.tsx
@@ -139,3 +139,23 @@ Plans:
 
 Plans:
 - [ ] TBD (run /gsd:plan-phase 7 to break down)
+
+### Phase 8: OCR Engine Research and Selection
+
+**Goal:** Research OCR engine alternatives to Tesseract (e.g. EasyOCR, PaddleOCR, Surya, cloud-based), evaluate accuracy/speed/licensing trade-offs, and expose engine selection in the UI and backend so users can pick the best engine for their documents
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 8 to break down)
+
+### Phase 9: Multi-arch Docker Compose Production Build
+
+**Goal:** Produce a single `docker-compose.yml` that builds and runs the full stack (FastAPI backend + React frontend via nginx) as multi-architecture images (linux/amd64 and linux/arm64), enabling one-command deployment on any Linux x86 or ARM server with no manual steps
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 9 to break down)
