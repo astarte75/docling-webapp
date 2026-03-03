@@ -107,7 +107,7 @@ export default function App() {
         )}
 
         {/* Upload zone area */}
-        <div className={isBatch || state.phase === 'success' ? 'mb-4' : 'mb-8'}>
+        <div className={isBatch ? 'mb-4' : 'mb-8'}>
           {isBatch ? (
             /* Batch compact strip */
             <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
@@ -120,20 +120,8 @@ export default function App() {
                 />
               </div>
             </div>
-          ) : state.phase === 'success' ? (
-            /* Single-file success compact strip */
-            <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
-              <span className="text-sm text-muted-foreground">Converti un altro file:</span>
-              <div className="flex-1">
-                <UploadZone
-                  onFilesSelected={handleFilesSelected}
-                  disabled={isConverting}
-                  compact
-                />
-              </div>
-            </div>
           ) : (
-            /* Hero upload zone (idle, converting, error) */
+            /* Hero upload zone (idle, converting, error, success) */
             <UploadZone
               onFilesSelected={handleFilesSelected}
               disabled={isConverting}
