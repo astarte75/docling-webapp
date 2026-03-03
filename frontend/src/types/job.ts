@@ -48,9 +48,13 @@ export type SSEEvent = SSEStartedEvent | SSECompletedEvent | SSEFailedEvent;
 /** OCR processing mode sent to the backend */
 export type OcrMode = 'auto' | 'on' | 'off';
 
+/** OCR engine selection — sent as ocr_engine to /convert */
+export type OcrEngine = 'auto' | 'easyocr' | 'rapidocr' | 'tesseract';
+
 /** Conversion options snapshot — captured at file-drop time, immutable per file */
 export interface ConversionOptions {
   ocrMode: OcrMode;
+  ocrEngine: OcrEngine;
   tableDetection: boolean;
   pageFrom: number | null;  // 1-based inclusive, null = first page
   pageTo: number | null;    // 1-based inclusive, null = last page
@@ -60,6 +64,7 @@ export interface ConversionOptions {
 /** Default options — matches backend ConversionOptions defaults */
 export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
   ocrMode: 'auto',
+  ocrEngine: 'auto',
   tableDetection: true,
   pageFrom: null,
   pageTo: null,
@@ -79,6 +84,14 @@ export interface BatchFile {
   markdown?: string;        // set when SSE emits 'completed'
   errorMessage?: string;    // set when SSE emits 'failed'
 }
+
+/** Engine options for the UI Select — friendly labels */
+export const OCR_ENGINES: { value: OcrEngine; label: string }[] = [
+  { value: 'auto',      label: 'Auto (best available)' },
+  { value: 'easyocr',  label: 'EasyOCR' },
+  { value: 'rapidocr', label: 'RapidOCR (fast)' },
+  { value: 'tesseract', label: 'Tesseract' },
+];
 
 /** Curated list of EasyOCR languages exposed in the UI */
 export const SUPPORTED_OCR_LANGUAGES: { code: string; label: string }[] = [
