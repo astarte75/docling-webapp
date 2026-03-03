@@ -103,6 +103,11 @@ Recent decisions affecting current work:
 - [Phase 04-options-panel-batch-conversion]: Single-file flow usa fetch diretto invece di useUpload per includere ConversionOptions nel FormData
 - [Phase 04-options-panel-batch-conversion]: UploadZone usa onFilesSelected (array) + compact prop per riutilizzo in strip mode
 
+### Roadmap Evolution
+
+- Phase 06 added: cancel-and-ux-fixes — cancel conversione in corso, navigazione logo→homepage, reset upload zone post-conversione
+- Phase 07 added: visual-redesign-frontend-design — redesign estetico completo con font, colori, animazioni e microinterazioni (frontend-design skill)
+
 ### Pending Todos
 
 None yet.

@@ -118,3 +118,23 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 3. React Frontend — Single File Flow | 4/4 | Complete   | 2026-03-03 |
 | 4. Options Panel + Batch Conversion | 5/5 | Complete   | 2026-03-03 |
 | 5. Production Docker Compose | 0/3 | Not started | - |
+
+### Phase 6: cancel-and-ux-fixes
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 6 to break down)
+
+### Phase 7: visual-redesign-frontend-design
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 6
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7 to break down)
