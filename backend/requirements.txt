@@ -4,3 +4,4 @@ python-multipart
 docling
 rapidocr-onnxruntime
 tesserocr
+easyocr

@@ -10,11 +10,27 @@ RUN apt-get update && apt-get install -y \
 
 # Install Tesseract system dependencies for TesseractOcrOptions support
 # MUST be installed before pip install (tesserocr links against libtesseract-dev at build time)
+# build-essential provides gcc required by cysignals (tesserocr dependency)
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-eng \
+    tesseract-ocr-ita \
+    tesseract-ocr-fra \
+    tesseract-ocr-deu \
+    tesseract-ocr-spa \
+    tesseract-ocr-por \
+    tesseract-ocr-nld \
+    tesseract-ocr-pol \
+    tesseract-ocr-rus \
+    tesseract-ocr-ara \
+    tesseract-ocr-hin \
+    tesseract-ocr-tur \
+    tesseract-ocr-jpn \
+    tesseract-ocr-kor \
+    tesseract-ocr-chi-sim \
     libtesseract-dev \
     libleptonica-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -29,14 +45,18 @@ RUN pip install --no-cache-dir -r requirements.txt \
 # This prevents 5-10 min hangs on first request
 RUN docling-tools models download
 
-# Pre-download RapidOCR models if available in docling-tools
+# Pre-download RapidOCR and EasyOCR models
 RUN docling-tools models download rapidocr 2>/dev/null || true
+RUN docling-tools models download easyocr 2>/dev/null || true
 
 # Set explicit model path so Docling finds pre-baked models at runtime
 ENV DOCLING_ARTIFACTS_PATH=/root/.cache/docling/models
 
 # Limit OMP threads to avoid thread congestion in containerized environment
 ENV OMP_NUM_THREADS=4
+
+# Required by tesserocr to locate Tesseract language data files
+ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 
 COPY backend/ .
 

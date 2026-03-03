@@ -17,10 +17,17 @@ import {
 } from '@/components/ui/select';
 
 import {
-  SUPPORTED_OCR_LANGUAGES,
   OCR_ENGINES,
+  EASYOCR_LANGUAGES,
+  TESSERACT_LANGUAGES,
 } from '@/types/job';
 import type { ConversionOptions, OcrMode, OcrEngine } from '@/types/job';
+
+/** Language list and default-lang info per engine */
+const ENGINE_LANG_CONFIG: Record<string, { langs: { code: string; label: string }[]; defaultHint: string }> = {
+  easyocr:  { langs: EASYOCR_LANGUAGES,  defaultHint: 'EN IT FR DE ES PT NL PL TR' },
+  tesseract: { langs: TESSERACT_LANGUAGES, defaultHint: 'EN IT FR DE ES' },
+};
 
 interface OptionsPanelProps {
   value: ConversionOptions;
@@ -30,12 +37,19 @@ interface OptionsPanelProps {
 export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
   const [advancedOpen, setAdvancedOpen] = React.useState(false);
 
-  // Radix Select does not allow empty string as item value — use sentinel
-  const LANG_NONE = '__none__';
+  function handleEngineChange(engine: OcrEngine) {
+    onChange({ ...value, ocrEngine: engine, ocrLanguages: [] });
+  }
 
-  // Derive single language code for the select (we store as array, expose as single)
-  const selectedLanguage =
-    value.ocrLanguages.length > 0 ? value.ocrLanguages[0] : LANG_NONE;
+  function handleLangToggle(code: string) {
+    const current = value.ocrLanguages;
+    const next = current.includes(code)
+      ? current.filter((c) => c !== code)
+      : [...current, code];
+    onChange({ ...value, ocrLanguages: next });
+  }
+
+  const langConfig = ENGINE_LANG_CONFIG[value.ocrEngine];
 
   return (
     <div className="space-y-3">
@@ -116,7 +130,7 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             <span className="text-sm text-muted-foreground shrink-0">Motore OCR</span>
             <Select
               value={value.ocrEngine}
-              onValueChange={(v) => onChange({ ...value, ocrEngine: v as OcrEngine })}
+              onValueChange={(v) => handleEngineChange(v as OcrEngine)}
             >
               <SelectTrigger className="w-48">
                 <SelectValue />
@@ -131,34 +145,62 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             </Select>
           </div>
 
-          {/* OCR language select */}
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-muted-foreground shrink-0">
-              Lingua OCR <span className="text-xs opacity-60">(EasyOCR)</span>
-            </span>
-            <Select
-              value={selectedLanguage}
-              onValueChange={(v) =>
-                onChange({
-                  ...value,
-                  ocrLanguages: v && v !== LANG_NONE ? [v] : [],
-                })
-              }
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Qualsiasi (default)" />
-              </SelectTrigger>
-              <SelectContent>
-                {/* Sentinel value resets to "any language" (Radix disallows empty string) */}
-                <SelectItem value={LANG_NONE}>Qualsiasi (default)</SelectItem>
-                {SUPPORTED_OCR_LANGUAGES.map((lang) => (
-                  <SelectItem key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Language selector */}
+          {!langConfig ? (
+            /* Auto / RapidOCR: multilingual, no selection needed */
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>🌍</span>
+              <span>
+                {value.ocrEngine === 'rapidocr'
+                  ? 'RapidOCR è multilingue automatico'
+                  : 'Il motore scelto automaticamente è multilingue'}
+              </span>
+            </div>
+          ) : (
+            /* EasyOCR / Tesseract: multi-select toggle buttons */
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  Lingue{' '}
+                  <span className="text-xs opacity-60">
+                    (default: {langConfig.defaultHint})
+                  </span>
+                </span>
+                {value.ocrLanguages.length > 0 && (
+                  <button
+                    onClick={() => onChange({ ...value, ocrLanguages: [] })}
+                    className="text-xs text-muted-foreground hover:text-foreground underline"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {langConfig.langs.map((lang) => {
+                  const selected = value.ocrLanguages.includes(lang.code);
+                  return (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLangToggle(lang.code)}
+                      className={[
+                        'px-2 py-0.5 text-xs rounded-md border transition-colors',
+                        selected
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-input bg-background text-muted-foreground hover:text-foreground hover:border-foreground/30',
+                      ].join(' ')}
+                    >
+                      {lang.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {value.ocrLanguages.length === 0 && (
+                <p className="text-xs text-muted-foreground opacity-60">
+                  Nessuna selezione = usa default
+                </p>
+              )}
+            </div>
+          )}
         </CollapsibleContent>
       </Collapsible>
     </div>

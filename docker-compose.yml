@@ -5,6 +5,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "${PORT:-3000}:8000"
+    volumes:
+      - ./backend:/app
     environment:
       - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-50}
+      - TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
     restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload

@@ -44,14 +44,17 @@ async def conversion_worker(state) -> None:
                 job.status = "converting"
                 await job.events.put({"type": "started", "message": "Conversion started"})
 
-                markdown = await state.converter.convert_file(job.tmp_path, job.options)
+                markdown, ocr_engine_used, ocr_engine_requested = await state.converter.convert_file(job.tmp_path, job.options)
 
                 job.status = "completed"
-                await job.events.put({"type": "completed", "markdown": markdown})
+                event: dict = {"type": "completed", "markdown": markdown, "ocr_engine": ocr_engine_used}
+                if ocr_engine_requested and ocr_engine_requested != ocr_engine_used:
+                    event["ocr_engine_requested"] = ocr_engine_requested
+                await job.events.put(event)
 
             except RuntimeError as exc:
                 job.status = "failed"
-                await job.events.put({"type": "failed", "message": str(exc)})
+                await job.events.put({"type": "failed", "message": str(exc), "ocr_engine": job.options.ocr_engine})
 
             except Exception:
                 logger.exception("Unexpected error processing job %s", job_id)

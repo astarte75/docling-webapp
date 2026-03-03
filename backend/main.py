@@ -142,7 +142,7 @@ async def convert(
     request.app.state.jobs[job_id] = job
     await request.app.state.dispatch_queue.put(job_id)
 
-    logger.info("Job %s queued (%d bytes, %s)", job_id, total_bytes, filename)
+    logger.info("Job %s queued (%d bytes, %s) ocr_engine=%s", job_id, total_bytes, filename, ocr_engine)
     return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"job_id": job_id})
 
 

@@ -5,8 +5,8 @@ export type AppPhase =
   | { phase: 'idle' }
   | { phase: 'uploading'; file: File }
   | { phase: 'converting'; jobId: string; file: File }
-  | { phase: 'success'; markdown: string; filename: string }
-  | { phase: 'error'; message: string; file: File }
+  | { phase: 'success'; markdown: string; filename: string; ocrEngine: OcrEngine; ocrEngineRequested?: OcrEngine }
+  | { phase: 'error'; message: string; file: File; ocrEngine?: OcrEngine }
   | { phase: 'batch-active'; files: BatchFile[] }
   | { phase: 'batch-complete'; files: BatchFile[] };
 
@@ -93,21 +93,37 @@ export const OCR_ENGINES: { value: OcrEngine; label: string }[] = [
   { value: 'tesseract', label: 'Tesseract' },
 ];
 
-/** Curated list of EasyOCR languages exposed in the UI */
-export const SUPPORTED_OCR_LANGUAGES: { code: string; label: string }[] = [
-  { code: 'en', label: 'English' },
-  { code: 'it', label: 'Italian' },
-  { code: 'fr', label: 'French' },
-  { code: 'de', label: 'German' },
-  { code: 'es', label: 'Spanish' },
-  { code: 'pt', label: 'Portuguese' },
-  { code: 'nl', label: 'Dutch' },
-  { code: 'pl', label: 'Polish' },
-  { code: 'ru', label: 'Russian' },
-  { code: 'zh', label: 'Chinese (Simplified)' },
-  { code: 'ja', label: 'Japanese' },
-  { code: 'ko', label: 'Korean' },
-  { code: 'ar', label: 'Arabic' },
-  { code: 'hi', label: 'Hindi' },
-  { code: 'tr', label: 'Turkish' },
+/** EasyOCR languages available with pre-downloaded models (latin_g2 + english_g2) */
+export const EASYOCR_LANGUAGES: { code: string; label: string }[] = [
+  { code: 'en', label: 'EN' },
+  { code: 'it', label: 'IT' },
+  { code: 'fr', label: 'FR' },
+  { code: 'de', label: 'DE' },
+  { code: 'es', label: 'ES' },
+  { code: 'pt', label: 'PT' },
+  { code: 'nl', label: 'NL' },
+  { code: 'pl', label: 'PL' },
+  { code: 'tr', label: 'TR' },
 ];
+
+/** Languages available for Tesseract — must match packages installed in the Docker image (multi-select) */
+export const TESSERACT_LANGUAGES: { code: string; label: string }[] = [
+  { code: 'en', label: 'EN' },
+  { code: 'it', label: 'IT' },
+  { code: 'fr', label: 'FR' },
+  { code: 'de', label: 'DE' },
+  { code: 'es', label: 'ES' },
+  { code: 'pt', label: 'PT' },
+  { code: 'nl', label: 'NL' },
+  { code: 'pl', label: 'PL' },
+  { code: 'ru', label: 'RU' },
+  { code: 'ar', label: 'AR' },
+  { code: 'hi', label: 'HI' },
+  { code: 'tr', label: 'TR' },
+  { code: 'zh', label: 'ZH' },
+  { code: 'ja', label: 'JA' },
+  { code: 'ko', label: 'KO' },
+];
+
+/** @deprecated use EASYOCR_LANGUAGES */
+export const SUPPORTED_OCR_LANGUAGES = EASYOCR_LANGUAGES;
