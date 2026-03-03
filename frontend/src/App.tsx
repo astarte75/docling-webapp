@@ -1,34 +1,56 @@
 import { useState, useCallback } from 'react';
-import { useUpload } from '@/hooks/useUpload';
 import { useJobStream } from '@/hooks/useJobStream';
+import { useBatchUpload } from '@/hooks/useBatchUpload';
 import { UploadZone } from '@/components/UploadZone';
+import { OptionsPanel } from '@/components/OptionsPanel';
 import { ConversionProgress } from '@/components/ConversionProgress';
 import { ResultViewer } from '@/components/ResultViewer';
+import { BatchList } from '@/components/BatchList';
 import { Button } from '@/components/ui/button';
-import type { AppPhase } from '@/types/job';
+import type { AppPhase, ConversionOptions } from '@/types/job';
+import { DEFAULT_CONVERSION_OPTIONS } from '@/types/job';
 
 export default function App() {
   const [state, setState] = useState<AppPhase>({ phase: 'idle' });
-  const upload = useUpload();
+  // Options state — sticky for session, reset on refresh (no localStorage)
+  const [currentOptions, setCurrentOptions] = useState<ConversionOptions>(DEFAULT_CONVERSION_OPTIONS);
+  const batchHook = useBatchUpload();
 
-  const startUpload = useCallback(async (file: File) => {
-    setState({ phase: 'uploading', file });
-    try {
-      const { job_id } = await upload.mutateAsync(file);
-      setState({ phase: 'converting', jobId: job_id, file });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Upload failed';
-      setState((prev) => ({
-        phase: 'error',
-        message,
-        file: prev.phase === 'uploading' || prev.phase === 'error' ? prev.file : file,
-      }));
+  // Handler for dropped files — decides single vs batch flow
+  const handleFilesSelected = useCallback(async (files: File[]) => {
+    if (files.length === 1) {
+      // Single-file flow — send with current options via direct fetch
+      const file = files[0];
+      setState({ phase: 'uploading', file });
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('ocr_mode', currentOptions.ocrMode);
+        formData.append('table_detection', String(currentOptions.tableDetection));
+        if (currentOptions.pageFrom !== null) formData.append('page_from', String(currentOptions.pageFrom));
+        if (currentOptions.pageTo !== null) formData.append('page_to', String(currentOptions.pageTo));
+        if (currentOptions.ocrLanguages.length > 0) formData.append('ocr_languages', currentOptions.ocrLanguages.join(','));
+
+        const res = await fetch('/api/convert', { method: 'POST', body: formData });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Upload failed' }));
+          throw new Error(body.error || 'Upload failed');
+        }
+        const { job_id } = await res.json();
+        setState({ phase: 'converting', jobId: job_id, file });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Upload failed';
+        setState({ phase: 'error', message, file });
+      }
+    } else {
+      // Batch flow — 2+ files
+      setState({ phase: 'batch-active', files: [] });
+      await batchHook.addFiles(files, currentOptions);
     }
-  }, [upload]);
+  }, [currentOptions, batchHook]);
 
-  // useJobStream watches jobId; null when not in converting state
+  // Single-file SSE — null when not converting
   const jobId = state.phase === 'converting' ? state.jobId : null;
-
   useJobStream(jobId, {
     onCompleted: useCallback((markdown: string) => {
       setState((prev) => ({
@@ -46,8 +68,8 @@ export default function App() {
     }, []),
   });
 
-  const isConverting =
-    state.phase === 'uploading' || state.phase === 'converting';
+  const isConverting = state.phase === 'uploading' || state.phase === 'converting';
+  const isBatch = state.phase === 'batch-active' || state.phase === 'batch-complete';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -61,32 +83,52 @@ export default function App() {
           </p>
         </header>
 
-        {/* Upload zone — hero in idle, compact in success state */}
-        <div className={state.phase === 'success' ? 'mb-6' : 'mb-8'}>
-          {state.phase === 'success' ? (
-            /* Compact strip after success — user can convert another file */
+        {/* Options Panel — visible in idle and batch-active (above upload zone) */}
+        {(state.phase === 'idle' || isBatch) && (
+          <div className="mb-4">
+            <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
+          </div>
+        )}
+
+        {/* Upload zone area */}
+        <div className={isBatch || state.phase === 'success' ? 'mb-4' : 'mb-8'}>
+          {isBatch ? (
+            /* Batch compact strip */
             <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
-              <span className="text-sm text-muted-foreground">Convert another file:</span>
+              <span className="text-sm text-muted-foreground">Aggiungi altri file:</span>
               <div className="flex-1">
                 <UploadZone
-                  onFileSelected={startUpload}
+                  onFilesSelected={(files) => batchHook.addFiles(files, currentOptions)}
+                  disabled={false}
+                  compact
+                />
+              </div>
+            </div>
+          ) : state.phase === 'success' ? (
+            /* Single-file success compact strip */
+            <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
+              <span className="text-sm text-muted-foreground">Converti un altro file:</span>
+              <div className="flex-1">
+                <UploadZone
+                  onFilesSelected={handleFilesSelected}
                   disabled={isConverting}
+                  compact
                 />
               </div>
             </div>
           ) : (
-            /* Hero upload zone */
+            /* Hero upload zone (idle, converting, error) */
             <UploadZone
-              onFileSelected={startUpload}
+              onFilesSelected={handleFilesSelected}
               disabled={isConverting}
             />
           )}
         </div>
 
-        {/* Converting state */}
+        {/* Converting state — single file */}
         {isConverting && <ConversionProgress />}
 
-        {/* Error state */}
+        {/* Error state — single file */}
         {state.phase === 'error' && (
           <div className="flex flex-col items-center gap-4 rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-8 text-center">
             <p className="text-sm font-medium text-destructive" role="alert">
@@ -94,19 +136,19 @@ export default function App() {
             </p>
             <Button
               variant="outline"
-              onClick={() => startUpload(state.file)}
+              onClick={() => handleFilesSelected([state.file])}
             >
-              Retry
+              Riprova
             </Button>
           </div>
         )}
 
-        {/* Success state */}
+        {/* Success state — single file */}
         {state.phase === 'success' && (
           <div className="rounded-lg border">
             <div className="border-b px-4 py-3">
               <p className="text-sm font-medium text-muted-foreground">
-                Conversion complete
+                Conversione completata
               </p>
             </div>
             <ResultViewer
@@ -114,6 +156,14 @@ export default function App() {
               filename={state.filename}
             />
           </div>
+        )}
+
+        {/* Batch state */}
+        {isBatch && batchHook.files.length > 0 && (
+          <BatchList
+            files={batchHook.files}
+            onRetry={batchHook.retryFile}
+          />
         )}
 
       </div>
