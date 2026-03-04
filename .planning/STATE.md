@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DockerHub Release
 status: unknown
-last_updated: "2026-03-04T21:30:10.735Z"
+last_updated: "2026-03-04T21:32:59.631Z"
 progress:
   total_phases: 1
   completed_phases: 1
