@@ -41,7 +41,7 @@ export function ResultViewer({ markdown, filename }: ResultViewerProps) {
           <Button onClick={() => downloadMarkdown(markdown, filename)}>
             Download .md
           </Button>
-          <Button variant="outline" onClick={handleCopy}>
+          <Button variant="outline" onClick={handleCopy} className="min-w-[9.5rem]">
             {copied ? 'Copied!' : 'Copy to clipboard'}
           </Button>
         </div>
