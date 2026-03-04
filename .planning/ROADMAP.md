@@ -26,7 +26,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ### 🚧 v1.3 DockerHub Release
 
-- [ ] **Phase 11: DockerHub Multi-arch Publish** — Build and publish multi-arch images (linux/amd64 + linux/arm64) to DockerHub so users can deploy with `docker compose up -d` without building locally. Includes Makefile with `buildx` push targets and `docker-compose.prod.yml` referencing pre-built images.
+- [x] **Phase 11: DockerHub Multi-arch Publish** — Build and publish multi-arch images (linux/amd64 + linux/arm64) to DockerHub so users can deploy with `docker compose up -d` without building locally. Includes Makefile with `buildx` push targets and `docker-compose.prod.yml` referencing pre-built images. (completed 2026-03-04)
 
 ### Phase 11: DockerHub Multi-arch Publish
 
@@ -39,7 +39,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** DCKR-01, DCKR-02, DCKR-03, DCKR-04
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 11-01-PLAN.md — Makefile (multi-arch buildx push targets) + docker-compose.prod.yml (pre-built image references)
@@ -58,4 +58,4 @@ Plans:
 | 8. OCR Engine Research and Selection | v1.0 | 4/4 | Complete | 2026-03-04 |
 | 9. UI Improvements | v1.0 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-arch Docker Compose Production Build | v1.0 | 2/2 | Complete | 2026-03-04 |
-| 11. DockerHub Multi-arch Publish | 1/2 | In Progress|  | - |
+| 11. DockerHub Multi-arch Publish | 2/2 | Complete   | 2026-03-04 | - |

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DockerHub Release
 status: unknown
-last_updated: "2026-03-04T21:27:59.160Z"
+last_updated: "2026-03-04T21:30:10.735Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 11 of 11 (DockerHub Multi-Arch Publish) — IN PROGRESS
-Plan: 1 of 2 in phase 11 — plan 01 executed (Makefile + docker-compose.prod.yml created)
-Status: Phase 11 Plan 01 COMPLETE — Makefile multi-arch push targets e docker-compose.prod.yml per deploy end-user
-Last activity: 2026-03-04 — Phase 11 Plan 01: Makefile con make push TAG=v1.x e docker-compose.prod.yml senza build blocks completati
+Phase: 11 of 11 (DockerHub Multi-Arch Publish) — COMPLETE
+Plan: 2 of 2 in phase 11 — ALL PLANS EXECUTED
+Status: Phase 11 COMPLETE — README aggiornato con Quick Start (pre-built images) come metodo primario di deploy
+Last activity: 2026-03-04 — Phase 11 Plan 02: README.md con sezione Quick Start (pre-built images) e docker-compose.prod.yml deploy command
 
-Progress: [██████████] Phase 11 In Progress | 1/2 plans complete
+Progress: [██████████] Phase 11 COMPLETE | 2/2 plans complete
 
 ## Performance Metrics
 
@@ -73,6 +73,7 @@ Progress: [██████████] Phase 11 In Progress | 1/2 plans comp
 | Phase 10-multi-arch-docker-compose-production-build P01 | 95 | 2 tasks | 5 files |
 | Phase 10 P02 | 600 | 2 tasks | 1 files |
 | Phase 11-dockerhub-multi-arch-publish P01 | 8 | 2 tasks | 2 files |
+| Phase 11 P02 | 3 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -136,6 +137,8 @@ Recent decisions affecting current work:
 - [Phase 10]: 127.0.0.1 in busybox wget healthcheck — busybox resolves localhost as IPv6 ::1 first; explicit IPv4 address bypasses the issue in Alpine nginx containers
 - [Phase 11-dockerhub-multi-arch-publish]: Double-tag in singolo buildx command (--tag :TAG --tag :latest) evita due cicli separati build+push
 - [Phase 11-dockerhub-multi-arch-publish]: docker-compose.prod.yml separato con pull_policy: always e solo image: references per deploy end-user senza source code
+- [Phase 11]: Quick Start (pre-built images) positioned as the primary/first deployment section — pre-built is the recommended flow for v1.3 end users
+- [Phase 11]: Quick Start (Docker Compose) renamed to Quick Start (build from source) to clearly distinguish the two deploy methods
 
 ### Roadmap Evolution
 
@@ -157,5 +160,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 11-01-PLAN.md — Makefile multi-arch push targets e docker-compose.prod.yml creati
+Stopped at: Completed 11-02-PLAN.md — README Quick Start (pre-built images) section aggiunta, Phase 11 completa
 Resume file: None
