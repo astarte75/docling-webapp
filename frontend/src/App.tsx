@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useJobStream } from '@/hooks/useJobStream';
 import { useBatchUpload } from '@/hooks/useBatchUpload';
 import { UploadZone } from '@/components/UploadZone';
@@ -79,6 +79,26 @@ export default function App() {
   const isBatch = state.phase === 'batch-active' || state.phase === 'batch-complete';
   const isSuccess = state.phase === 'success';
 
+  // Transition state: exitingHome triggers fade-out of homepage,
+  // then displaySuccess mounts the success layout after the animation
+  const [displaySuccess, setDisplaySuccess] = useState(false);
+  const [exitingHome, setExitingHome] = useState(false);
+
+  useEffect(() => {
+    if (isSuccess && !displaySuccess) {
+      setExitingHome(true);
+      const t = setTimeout(() => {
+        setDisplaySuccess(true);
+        setExitingHome(false);
+      }, 350);
+      return () => clearTimeout(t);
+    }
+    if (!isSuccess) {
+      setDisplaySuccess(false);
+      setExitingHome(false);
+    }
+  }, [isSuccess]);
+
   const resetApp = useCallback(() => {
     batchHook.clearFiles();
     setState({ phase: 'idle' });
@@ -89,7 +109,7 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground app-bg">
 
       {/* Branch A — success state: full-width two-column layout */}
-      {isSuccess && state.phase === 'success' && (
+      {displaySuccess && state.phase === 'success' && (
         <div className="px-6 py-8 animate-fade-up">
           {/* Compact header: logo+title on left, ModeToggle on right */}
           <header className="mb-6 flex items-center justify-between">
@@ -106,17 +126,16 @@ export default function App() {
 
           {/* Two-column grid */}
           <div className="grid grid-cols-[340px_1fr] gap-6 items-start">
-            {/* Left sidebar: options + upload for next file */}
+            {/* Left sidebar: upload for next file + options below */}
             <aside className="space-y-4">
-              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
               <div>
                 <p className="text-xs text-muted-foreground mb-2">Converti un altro file</p>
                 <UploadZone
                   onFilesSelected={handleFilesSelected}
                   disabled={false}
-                  compact
                 />
               </div>
+              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
             </aside>
 
             {/* Right panel: result */}
@@ -142,8 +161,8 @@ export default function App() {
       )}
 
       {/* Branch B — all other states: single-column centered layout */}
-      {!isSuccess && (
-        <div className="mx-auto max-w-3xl px-4 py-8">
+      {!displaySuccess && (
+        <div className={`mx-auto max-w-3xl px-4 py-8 ${exitingHome ? 'animate-fade-out' : ''}`}>
 
           {/* Header — fades in first */}
           <header className="mb-8 animate-fade-up" style={{ animationDelay: '0ms' }}>
@@ -172,15 +191,8 @@ export default function App() {
             </p>
           </header>
 
-          {/* Options Panel — slides in second */}
-          {(state.phase === 'idle' || isBatch) && (
-            <div className="mb-4 animate-fade-up" style={{ animationDelay: '120ms' }}>
-              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
-            </div>
-          )}
-
-          {/* Upload zone area — slides in third */}
-          <div className={`${isBatch ? 'mb-4' : 'mb-8'} animate-fade-up`} style={{ animationDelay: '220ms' }}>
+          {/* Upload zone area — slides in second */}
+          <div className={`${isBatch ? 'mb-4' : 'mb-8'} animate-fade-up`} style={{ animationDelay: '120ms' }}>
             {isBatch ? (
               /* Batch compact strip */
               <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
@@ -201,6 +213,13 @@ export default function App() {
               />
             )}
           </div>
+
+          {/* Options Panel — slides in third */}
+          {(state.phase === 'idle' || isBatch) && (
+            <div className="mb-4 animate-fade-up" style={{ animationDelay: '220ms' }}>
+              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
+            </div>
+          )}
 
           {/* Converting state — single file */}
           {isConverting && (

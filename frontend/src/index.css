@@ -155,3 +155,20 @@
 .animate-fade-up {
   animation: fadeSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* ─── Exit animation: fade + slide up (homepage → success) ─── */
+@keyframes fadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.98);
+  }
+}
+
+.animate-fade-out {
+  animation: fadeSlideOut 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
