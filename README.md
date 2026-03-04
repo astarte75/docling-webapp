@@ -35,7 +35,45 @@ OCR is auto-selected at runtime (RapidOCR by default). All three engines are pre
 
 ---
 
-## Quick Start (Docker Compose)
+## Quick Start (pre-built images)
+
+Pull pre-built multi-arch images from DockerHub — no source code or build tools required.
+
+### Requirements
+
+- Docker Engine 24+ with Compose v2
+- ~4 GB disk space on first pull (Docling ML models are pre-baked in the image)
+- No GPU required (CPU inference)
+- Supported architectures: linux/amd64, linux/arm64
+
+### Deploy
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+```
+
+The app is available at **http://localhost:3000**.
+
+To use a different port:
+
+```bash
+PORT=8080 docker compose -f docker-compose.prod.yml up -d
+```
+
+> **Note:** The backend image is ~1.5 GB (Docling ML models pre-baked). First pull takes a few minutes depending on network speed. Subsequent starts are instant.
+
+### Update (existing users)
+
+```bash
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Images: [ricky75/docling-webapp-backend](https://hub.docker.com/r/ricky75/docling-webapp-backend) · [ricky75/docling-webapp-frontend](https://hub.docker.com/r/ricky75/docling-webapp-frontend)
+
+---
+
+## Quick Start (build from source)
 
 ### Requirements
 
