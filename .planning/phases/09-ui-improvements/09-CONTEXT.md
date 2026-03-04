@@ -43,8 +43,17 @@ Visual and UX improvements to the existing frontend interface. No new features o
 - Subtitle "Convert documents to Markdown" unchanged
 - ModeToggle stays top-right
 
+### Split layout on success state
+- **Idle / Converting / Error**: single column layout, unchanged (max-w-3xl centered)
+- **Success**: two-column layout — left narrow sidebar (~340px) with logo + options + upload zone for next file; right wide panel with ResultViewer markdown
+- Grid: `grid grid-cols-[340px_1fr]` or similar, full width (no max-w-3xl constraint in success state)
+- Transition: when state switches to success the layout expands smoothly into two columns
+- Batch mode: not affected by this change (batch has its own layout)
+
 ### Claude's Discretion
-- Any additional polish within the above constraints (hover states, color tuning, spacing tweaks)
+- Exact column widths and gap
+- Transition animation between single-column and split layout
+- How to handle the logo/header in split mode (keep centered above both columns, or collapse into left sidebar only)
 - Spacing/sizing of the logo relative to the title
 
 </decisions>

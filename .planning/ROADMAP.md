@@ -160,10 +160,11 @@ Plans:
 **Goal:** Improve the frontend interface with bug fixes and visual enhancements — fix the OCR Mode/Engine inconsistency (selecting a specific engine deselects Auto), and apply design improvements (animations, background, layout polish) using the frontend-design skill
 **Requirements**: (UX improvements — no new requirement IDs)
 **Depends on:** Phase 8
-**Plans:** TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 9 to break down)
+- [ ] 09-01-PLAN.md — Split two-column layout in App.tsx for success state (340px sidebar + flex-1 ResultViewer)
+- [ ] 09-02-PLAN.md — Human verification checkpoint of all Phase 9 UI improvements
 
 ### Phase 10: Multi-arch Docker Compose Production Build
 
