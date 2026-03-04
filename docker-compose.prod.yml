@@ -1,0 +1,38 @@
+# Deploy with: docker compose -f docker-compose.prod.yml up -d
+# Images are pulled from DockerHub (ricky75/docling-webapp-*)
+# No source code or build tools required on the deployment server
+#
+# Environment variables (all optional — defaults cover standard deployments):
+#   PORT                Host port exposed by the frontend (default: 3000)
+#   MAX_UPLOAD_SIZE_MB  Upload file size limit in MB (default: 50)
+
+services:
+  backend:
+    image: ricky75/docling-webapp-backend:latest
+    pull_policy: always
+    environment:
+      - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-50}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s  # Docling model loading takes 30-60s on first start
+
+  frontend:
+    image: ricky75/docling-webapp-frontend:latest
+    pull_policy: always
+    ports:
+      - "${PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
