@@ -77,6 +77,7 @@ export default function App() {
 
   const isConverting = state.phase === 'uploading' || state.phase === 'converting';
   const isBatch = state.phase === 'batch-active' || state.phase === 'batch-complete';
+  const isSuccess = state.phase === 'success';
 
   const resetApp = useCallback(() => {
     batchHook.clearFiles();
@@ -86,126 +87,160 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="docling-theme">
     <div className="min-h-screen bg-background text-foreground app-bg">
-      <div className="mx-auto max-w-3xl px-4 py-8">
 
-        {/* Header — fades in first */}
-        <header className="mb-8 animate-fade-up" style={{ animationDelay: '0ms' }}>
-          <div className="flex items-center justify-between">
-            <div className="flex-1" />
-            <div className="flex flex-col items-center gap-3">
-              <DoclingLogo className="h-11 w-10 text-foreground" />
-              <h1
-                className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
-                onClick={resetApp}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') resetApp();
-                }}
-              >
-                Docling Webapp
-              </h1>
-            </div>
-            <div className="flex-1 flex justify-end">
-              <ModeToggle />
-            </div>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground text-center">
-            Convert documents to Markdown
-          </p>
-        </header>
+      {/* Branch A — success state: full-width two-column layout */}
+      {isSuccess && state.phase === 'success' && (
+        <div className="px-6 py-8 animate-fade-up">
+          {/* Compact header: logo+title on left, ModeToggle on right */}
+          <header className="mb-6 flex items-center justify-between">
+            <button
+              className="flex items-center gap-3 hover:opacity-70 transition-opacity"
+              onClick={resetApp}
+              aria-label="Reset to home"
+            >
+              <DoclingLogo className="h-8 w-7 text-foreground" />
+              <span className="text-lg font-semibold">Docling Webapp</span>
+            </button>
+            <ModeToggle />
+          </header>
 
-        {/* Options Panel — slides in second */}
-        {(state.phase === 'idle' || isBatch) && (
-          <div className="mb-4 animate-fade-up" style={{ animationDelay: '120ms' }}>
-            <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
-          </div>
-        )}
-
-        {/* Upload zone area — slides in third */}
-        <div className={`${isBatch ? 'mb-4' : 'mb-8'} animate-fade-up`} style={{ animationDelay: '220ms' }}>
-          {isBatch ? (
-            /* Batch compact strip */
-            <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
-              <span className="text-sm text-muted-foreground">Aggiungi altri file:</span>
-              <div className="flex-1">
+          {/* Two-column grid */}
+          <div className="grid grid-cols-[340px_1fr] gap-6 items-start">
+            {/* Left sidebar: options + upload for next file */}
+            <aside className="space-y-4">
+              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
+              <div>
+                <p className="text-xs text-muted-foreground mb-2">Converti un altro file</p>
                 <UploadZone
-                  onFilesSelected={(files) => batchHook.addFiles(files, currentOptions)}
+                  onFilesSelected={handleFilesSelected}
                   disabled={false}
                   compact
                 />
               </div>
+            </aside>
+
+            {/* Right panel: result */}
+            <main className="min-w-0">
+              <div className="mb-3 flex items-center gap-2">
+                <p className="text-sm font-medium text-muted-foreground">Conversione completata</p>
+                {state.ocrEngineRequested ? (
+                  <span className="inline-flex items-center rounded-full border border-yellow-500/50 bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-600 dark:text-yellow-400">
+                    OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngineRequested)?.label ?? state.ocrEngineRequested} → {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine}
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center rounded-full border border-green-500/50 bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
+                    OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine}
+                  </span>
+                )}
+              </div>
+              <div className="rounded-lg border">
+                <ResultViewer markdown={state.markdown} filename={state.filename} />
+              </div>
+            </main>
+          </div>
+        </div>
+      )}
+
+      {/* Branch B — all other states: single-column centered layout */}
+      {!isSuccess && (
+        <div className="mx-auto max-w-3xl px-4 py-8">
+
+          {/* Header — fades in first */}
+          <header className="mb-8 animate-fade-up" style={{ animationDelay: '0ms' }}>
+            <div className="flex items-center justify-between">
+              <div className="flex-1" />
+              <div className="flex flex-col items-center gap-3">
+                <DoclingLogo className="h-11 w-10 text-foreground" />
+                <h1
+                  className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
+                  onClick={resetApp}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') resetApp();
+                  }}
+                >
+                  Docling Webapp
+                </h1>
+              </div>
+              <div className="flex-1 flex justify-end">
+                <ModeToggle />
+              </div>
             </div>
-          ) : (
-            /* Hero upload zone (idle, converting, error, success) */
-            <UploadZone
-              onFilesSelected={handleFilesSelected}
-              disabled={isConverting}
+            <p className="mt-2 text-sm text-muted-foreground text-center">
+              Convert documents to Markdown
+            </p>
+          </header>
+
+          {/* Options Panel — slides in second */}
+          {(state.phase === 'idle' || isBatch) && (
+            <div className="mb-4 animate-fade-up" style={{ animationDelay: '120ms' }}>
+              <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
+            </div>
+          )}
+
+          {/* Upload zone area — slides in third */}
+          <div className={`${isBatch ? 'mb-4' : 'mb-8'} animate-fade-up`} style={{ animationDelay: '220ms' }}>
+            {isBatch ? (
+              /* Batch compact strip */
+              <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
+                <span className="text-sm text-muted-foreground">Aggiungi altri file:</span>
+                <div className="flex-1">
+                  <UploadZone
+                    onFilesSelected={(files) => batchHook.addFiles(files, currentOptions)}
+                    disabled={false}
+                    compact
+                  />
+                </div>
+              </div>
+            ) : (
+              /* Hero upload zone (idle, converting, error) */
+              <UploadZone
+                onFilesSelected={handleFilesSelected}
+                disabled={isConverting}
+              />
+            )}
+          </div>
+
+          {/* Converting state — single file */}
+          {isConverting && (
+            <ConversionProgress
+              onCancel={() => setState({ phase: 'idle' })}
             />
           )}
-        </div>
 
-        {/* Converting state — single file */}
-        {isConverting && (
-          <ConversionProgress
-            onCancel={() => setState({ phase: 'idle' })}
-          />
-        )}
-
-        {/* Error state — single file */}
-        {state.phase === 'error' && (
-          <div className="flex flex-col items-center gap-4 rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-8 text-center">
-            {state.ocrEngine && (
-              <span className="inline-flex items-center rounded-full border border-destructive/50 bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
-                OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine} — non disponibile
-              </span>
-            )}
-            <p className="text-sm font-medium text-destructive" role="alert">
-              {state.message}
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => handleFilesSelected([state.file])}
-            >
-              Riprova
-            </Button>
-          </div>
-        )}
-
-        {/* Success state — single file */}
-        {state.phase === 'success' && (
-          <div className="rounded-lg border">
-            <div className="border-b px-4 py-3 flex items-center gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                Conversione completata
-              </p>
-              {state.ocrEngineRequested ? (
-                <span className="inline-flex items-center rounded-full border border-yellow-500/50 bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-600 dark:text-yellow-400">
-                  OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngineRequested)?.label ?? state.ocrEngineRequested} → {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine}
-                </span>
-              ) : (
-                <span className="inline-flex items-center rounded-full border border-green-500/50 bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
-                  OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine}
+          {/* Error state — single file */}
+          {state.phase === 'error' && (
+            <div className="flex flex-col items-center gap-4 rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-8 text-center">
+              {state.ocrEngine && (
+                <span className="inline-flex items-center rounded-full border border-destructive/50 bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
+                  OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine} — non disponibile
                 </span>
               )}
+              <p className="text-sm font-medium text-destructive" role="alert">
+                {state.message}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => handleFilesSelected([state.file])}
+              >
+                Riprova
+              </Button>
             </div>
-            <ResultViewer
-              markdown={state.markdown}
-              filename={state.filename}
+          )}
+
+          {/* Batch state */}
+          {isBatch && batchHook.files.length > 0 && (
+            <BatchList
+              files={batchHook.files}
+              onRetry={batchHook.retryFile}
+              onCancel={batchHook.cancelFile}
             />
-          </div>
-        )}
+          )}
 
-        {/* Batch state */}
-        {isBatch && batchHook.files.length > 0 && (
-          <BatchList
-            files={batchHook.files}
-            onRetry={batchHook.retryFile}
-            onCancel={batchHook.cancelFile}
-          />
-        )}
+        </div>
+      )}
 
-      </div>
     </div>
     </ThemeProvider>
   );
