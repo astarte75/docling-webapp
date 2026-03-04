@@ -1,14 +1,43 @@
+# Production Docker Compose — runs the full stack with a single command:
+#   docker compose up --build -d
+#
+# For local development, use:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Environment variables (all optional — defaults cover standard deployments):
+#   PORT              Host port exposed by nginx (default: 3000)
+#   MAX_UPLOAD_SIZE_MB  Upload file size limit in MB (default: 50)
+
 services:
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "${PORT:-3000}:8000"
-    volumes:
-      - ./backend:/app
     environment:
       - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-50}
-      - TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
     restart: unless-stopped
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    # Backend not exposed directly — nginx talks to it via Docker network
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s  # Docling model loading takes 30-60s on first start
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "${PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
