@@ -123,3 +123,35 @@
     @apply bg-background text-foreground;
     }
 }
+
+/* ─── App background: dot grid + emerald glow at top ─── */
+.app-bg {
+  /* Subtle emerald radial halo at top + fine dot grid */
+  background-image:
+    radial-gradient(ellipse 70% 28% at 50% -4%, oklch(59.6% .145 163.225 / 0.1), transparent),
+    radial-gradient(circle at 1px 1px, oklch(0 0 0 / 0.055) 1px, transparent 0);
+  background-size: 100%, 24px 24px;
+}
+
+.dark .app-bg {
+  background-image:
+    radial-gradient(ellipse 70% 28% at 50% -4%, oklch(76.5% .177 163.223 / 0.18), transparent),
+    radial-gradient(circle at 1px 1px, oklch(1 0 0 / 0.05) 1px, transparent 0);
+  background-size: 100%, 24px 24px;
+}
+
+/* ─── Entry animation: fade + slide up ─── */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

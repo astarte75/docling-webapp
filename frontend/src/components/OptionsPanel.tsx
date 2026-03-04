@@ -38,7 +38,10 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
   const [advancedOpen, setAdvancedOpen] = React.useState(false);
 
   function handleEngineChange(engine: OcrEngine) {
-    onChange({ ...value, ocrEngine: engine, ocrLanguages: [] });
+    // Selecting a specific engine while ocrMode is 'auto' is contradictory:
+    // switch to 'on' so the mode buttons reflect the actual behavior.
+    const nextMode = engine !== 'auto' && value.ocrMode === 'auto' ? 'on' : value.ocrMode;
+    onChange({ ...value, ocrEngine: engine, ocrLanguages: [], ocrMode: nextMode });
   }
 
   function handleLangToggle(code: string) {
@@ -62,7 +65,11 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
           value={value.ocrMode}
           onValueChange={(v) => {
             // Guard against deselection (Radix emits "" when clicking the already-selected item)
-            if (v) onChange({ ...value, ocrMode: v as OcrMode });
+            if (!v) return;
+            const nextMode = v as OcrMode;
+            // Switching to 'auto' means the engine choice is also automatic.
+            const nextEngine = nextMode === 'auto' ? 'auto' : value.ocrEngine;
+            onChange({ ...value, ocrMode: nextMode, ocrEngine: nextEngine });
           }}
         >
           <ToggleGroupItem value="auto">Auto</ToggleGroupItem>

@@ -155,12 +155,32 @@ Plans:
 - [ ] 08-03-PLAN.md — Written benchmark document (08-BENCHMARK.md)
 - [ ] 08-04-PLAN.md — Human verification checkpoint
 
-### Phase 9: Multi-arch Docker Compose Production Build
+### Phase 9: UI Improvements
 
-**Goal:** Produce a single `docker-compose.yml` that builds and runs the full stack (FastAPI backend + React frontend via nginx) as multi-architecture images (linux/amd64 and linux/arm64), enabling one-command deployment on any Linux x86 or ARM server with no manual steps
-**Requirements**: TBD
-**Depends on:** Phase 5
-**Plans:** 0 plans
+**Goal:** Improve the frontend interface with bug fixes and visual enhancements — fix the OCR Mode/Engine inconsistency (selecting a specific engine deselects Auto), and apply design improvements (animations, background, layout polish) using the frontend-design skill
+**Requirements**: (UX improvements — no new requirement IDs)
+**Depends on:** Phase 8
+**Plans:** TBD
 
 Plans:
 - [ ] TBD (run /gsd:plan-phase 9 to break down)
+
+### Phase 10: Multi-arch Docker Compose Production Build
+
+**Goal:** Produce a production `docker-compose.yml` that builds and runs the full stack (FastAPI backend + React frontend via nginx) as multi-architecture images (linux/amd64 and linux/arm64), enabling one-command deployment on any Linux x86 or ARM server with no manual steps
+**Requirements**: INFR-01, INFR-02, INFR-03
+**Depends on:** Phase 9
+**Plans:** TBD
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 10 to break down)
+
+### Phase 11: DockerHub Multi-arch Publish
+
+**Goal:** Build and publish multi-arch Docker images (linux/amd64 + linux/arm64) to DockerHub so end users can deploy the full stack with a single `docker compose up -d` without building locally — includes Makefile with buildx push targets and a `docker-compose.prod.yml` referencing pre-built images
+**Requirements**: (release automation — no new requirement IDs)
+**Depends on:** Phase 10
+**Plans:** TBD
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 11 to break down)

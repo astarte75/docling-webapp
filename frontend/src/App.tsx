@@ -6,6 +6,7 @@ import { OptionsPanel } from '@/components/OptionsPanel';
 import { ConversionProgress } from '@/components/ConversionProgress';
 import { ResultViewer } from '@/components/ResultViewer';
 import { BatchList } from '@/components/BatchList';
+import { DoclingLogo } from '@/components/DoclingLogo';
 import { Button } from '@/components/ui/button';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/mode-toggle';
@@ -77,32 +78,34 @@ export default function App() {
   const isConverting = state.phase === 'uploading' || state.phase === 'converting';
   const isBatch = state.phase === 'batch-active' || state.phase === 'batch-complete';
 
+  const resetApp = useCallback(() => {
+    batchHook.clearFiles();
+    setState({ phase: 'idle' });
+  }, [batchHook]);
+
   return (
     <ThemeProvider defaultTheme="system" storageKey="docling-theme">
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground app-bg">
       <div className="mx-auto max-w-3xl px-4 py-8">
 
-        {/* Header */}
-        <header className="mb-8">
+        {/* Header — fades in first */}
+        <header className="mb-8 animate-fade-up" style={{ animationDelay: '0ms' }}>
           <div className="flex items-center justify-between">
             <div className="flex-1" />
-            <h1
-              className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
-              onClick={() => {
-                batchHook.clearFiles(); // closes all batch EventSources + clears batch state
-                setState({ phase: 'idle' }); // sets jobId=null → triggers useJobStream useEffect cleanup
-              }}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  batchHook.clearFiles();
-                  setState({ phase: 'idle' });
-                }
-              }}
-            >
-              Docling Webapp
-            </h1>
+            <div className="flex flex-col items-center gap-3">
+              <DoclingLogo className="h-11 w-10 text-foreground" />
+              <h1
+                className="text-2xl font-semibold tracking-tight cursor-pointer select-none hover:opacity-70 transition-opacity"
+                onClick={resetApp}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') resetApp();
+                }}
+              >
+                Docling Webapp
+              </h1>
+            </div>
             <div className="flex-1 flex justify-end">
               <ModeToggle />
             </div>
@@ -112,15 +115,15 @@ export default function App() {
           </p>
         </header>
 
-        {/* Options Panel — visible in idle and batch-active (above upload zone) */}
+        {/* Options Panel — slides in second */}
         {(state.phase === 'idle' || isBatch) && (
-          <div className="mb-4">
+          <div className="mb-4 animate-fade-up" style={{ animationDelay: '120ms' }}>
             <OptionsPanel value={currentOptions} onChange={setCurrentOptions} />
           </div>
         )}
 
-        {/* Upload zone area */}
-        <div className={isBatch ? 'mb-4' : 'mb-8'}>
+        {/* Upload zone area — slides in third */}
+        <div className={`${isBatch ? 'mb-4' : 'mb-8'} animate-fade-up`} style={{ animationDelay: '220ms' }}>
           {isBatch ? (
             /* Batch compact strip */
             <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
