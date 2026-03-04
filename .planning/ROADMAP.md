@@ -39,7 +39,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** DCKR-01, DCKR-02, DCKR-03, DCKR-04
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 11-01-PLAN.md — Makefile (multi-arch buildx push targets) + docker-compose.prod.yml (pre-built image references)
@@ -58,4 +58,4 @@ Plans:
 | 8. OCR Engine Research and Selection | v1.0 | 4/4 | Complete | 2026-03-04 |
 | 9. UI Improvements | v1.0 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-arch Docker Compose Production Build | v1.0 | 2/2 | Complete | 2026-03-04 |
-| 11. DockerHub Multi-arch Publish | v1.3 | 0/2 | In progress | - |
+| 11. DockerHub Multi-arch Publish | 1/2 | In Progress|  | - |

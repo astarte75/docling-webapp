@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v1.3
+milestone_name: DockerHub Release
 status: unknown
-last_updated: "2026-03-04T07:50:46.281Z"
+last_updated: "2026-03-04T21:27:59.160Z"
 progress:
-  total_phases: 9
-  completed_phases: 9
-  total_plans: 26
-  completed_plans: 26
+  total_phases: 1
+  completed_phases: 0
+  total_plans: 2
+  completed_plans: 1
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 10 of 10 (Multi-arch Docker Compose Production Build) — COMPLETE
-Plan: 2 of 2 in phase 10 — plan 02 executed (human verification approved)
-Status: Phase 10 COMPLETE — full production stack verified end-to-end by user
-Last activity: 2026-03-04 — Phase 10 Plan 02: production stack human verification approved (PDF/DOCX/PPTX + SSE streaming + Markdown output confirmed)
+Phase: 11 of 11 (DockerHub Multi-Arch Publish) — IN PROGRESS
+Plan: 1 of 2 in phase 11 — plan 01 executed (Makefile + docker-compose.prod.yml created)
+Status: Phase 11 Plan 01 COMPLETE — Makefile multi-arch push targets e docker-compose.prod.yml per deploy end-user
+Last activity: 2026-03-04 — Phase 11 Plan 01: Makefile con make push TAG=v1.x e docker-compose.prod.yml senza build blocks completati
 
-Progress: [██████████] 100% all phases complete | 26/26 plans
+Progress: [██████████] Phase 11 In Progress | 1/2 plans complete
 
 ## Performance Metrics
 
@@ -72,6 +72,7 @@ Progress: [██████████] 100% all phases complete | 26/26 plan
 | Phase 09-ui-improvements P02 | 0 | 1 tasks | 0 files |
 | Phase 10-multi-arch-docker-compose-production-build P01 | 95 | 2 tasks | 5 files |
 | Phase 10 P02 | 600 | 2 tasks | 1 files |
+| Phase 11-dockerhub-multi-arch-publish P01 | 8 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -133,6 +134,8 @@ Recent decisions affecting current work:
 - [Phase 10-multi-arch-docker-compose-production-build]: start_period 90s on backend healthcheck for Docling ML model loading time
 - [Phase 10-multi-arch-docker-compose-production-build]: depends_on condition: service_healthy ensures nginx starts only after backend health check passes
 - [Phase 10]: 127.0.0.1 in busybox wget healthcheck — busybox resolves localhost as IPv6 ::1 first; explicit IPv4 address bypasses the issue in Alpine nginx containers
+- [Phase 11-dockerhub-multi-arch-publish]: Double-tag in singolo buildx command (--tag :TAG --tag :latest) evita due cicli separati build+push
+- [Phase 11-dockerhub-multi-arch-publish]: docker-compose.prod.yml separato con pull_policy: always e solo image: references per deploy end-user senza source code
 
 ### Roadmap Evolution
 
@@ -154,5 +157,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 10-02-PLAN.md — production stack human verification approved by user; milestone v1.0 reached
+Stopped at: Completed 11-01-PLAN.md — Makefile multi-arch push targets e docker-compose.prod.yml creati
 Resume file: None
