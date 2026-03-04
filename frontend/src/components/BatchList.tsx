@@ -45,14 +45,14 @@ export function BatchList({ files, onRetry, onCancel }: BatchListProps) {
       {doneCount > 0 && (
         <div className="border-t px-3 py-3 flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            {doneCount} file convertit{doneCount === 1 ? 'o' : 'i'}
-            {hasActive && ' (conversioni in corso...)'}
+            {doneCount} file{doneCount === 1 ? '' : 's'} converted
+            {hasActive && ' (conversions in progress...)'}
           </span>
           <Button
             onClick={() => downloadBatchZip(files)}
             disabled={doneCount === 0}
           >
-            Scarica ZIP ({doneCount} {doneCount === 1 ? 'file' : 'file'})
+            Download ZIP ({doneCount} {doneCount === 1 ? 'file' : 'files'})
           </Button>
         </div>
       )}

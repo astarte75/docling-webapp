@@ -12,7 +12,7 @@ function getRejectionMessage(rejections: FileRejection[]): string {
     case ErrorCode.FileTooLarge:
       return 'File exceeds the 50MB limit';
     case ErrorCode.FileInvalidType:
-      return 'Only PDF files are supported';
+      return 'Unsupported file type. Accepted: PDF, DOCX, PPTX, XLSX, HTML, MD';
     default:
       return error.message;
   }
@@ -28,7 +28,14 @@ export function UploadZone({ onFilesSelected, disabled = false, compact = false 
   const [error, setError] = useState<string | null>(null);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { 'application/pdf': ['.pdf'] },
+    accept: {
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'text/html': ['.html', '.htm'],
+      'text/markdown': ['.md'],
+    },
     maxSize: MAX_FILE_SIZE,
     multiple: true,
     disabled,
@@ -56,7 +63,7 @@ export function UploadZone({ onFilesSelected, disabled = false, compact = false 
           ].join(' ')}
         >
           <input {...getInputProps()} />
-          <span>Aggiungi altri file...</span>
+          <span>Add more files...</span>
         </div>
         {error && (
           <p className="text-xs text-destructive" role="alert">
@@ -96,7 +103,7 @@ export function UploadZone({ onFilesSelected, disabled = false, compact = false 
         ) : (
           <>
             <p className="text-sm font-medium">Drag and drop files, or click to browse</p>
-            <p className="mt-1 text-xs text-muted-foreground">PDF only · max 50MB per file</p>
+            <p className="mt-1 text-xs text-muted-foreground">PDF, DOCX, PPTX, XLSX, HTML, MD · max 50MB per file</p>
           </>
         )}
       </div>

@@ -85,13 +85,13 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             className="h-4 w-4 transition-transform duration-200"
             style={{ transform: advancedOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
           />
-          Opzioni avanzate
+          Advanced options
         </CollapsibleTrigger>
 
         <CollapsibleContent className="mt-3 space-y-3">
           {/* Table detection switch */}
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Rilevamento tabelle</span>
+            <span className="text-sm text-muted-foreground">Table detection</span>
             <Switch
               checked={value.tableDetection}
               onCheckedChange={(checked) =>
@@ -102,7 +102,7 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
 
           {/* Page range inputs */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground shrink-0">Pagine: da</span>
+            <span className="text-sm text-muted-foreground shrink-0">Pages: from</span>
             <input
               type="number"
               min="1"
@@ -116,11 +116,11 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
               }
               className="w-20 text-center rounded-md border border-input bg-background px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
-            <span className="text-sm text-muted-foreground">a</span>
+            <span className="text-sm text-muted-foreground">to</span>
             <input
               type="number"
               min="1"
-              placeholder="fine"
+              placeholder="end"
               value={value.pageTo ?? ''}
               onChange={(e) =>
                 onChange({
@@ -134,7 +134,7 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
 
           {/* OCR engine select */}
           <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-muted-foreground shrink-0">Motore OCR</span>
+            <span className="text-sm text-muted-foreground shrink-0">OCR engine</span>
             <Select
               value={value.ocrEngine}
               onValueChange={(v) => handleEngineChange(v as OcrEngine)}
@@ -159,8 +159,8 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
               <span>🌍</span>
               <span>
                 {value.ocrEngine === 'rapidocr'
-                  ? 'RapidOCR è multilingue automatico'
-                  : 'Il motore scelto automaticamente è multilingue'}
+                  ? 'RapidOCR is multilingual by default'
+                  : 'The automatically selected engine is multilingual'}
               </span>
             </div>
           ) : (
@@ -168,7 +168,7 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  Lingue{' '}
+                  Languages{' '}
                   <span className="text-xs opacity-60">
                     (default: {langConfig.defaultHint})
                   </span>
@@ -203,7 +203,7 @@ export function OptionsPanel({ value, onChange }: OptionsPanelProps) {
               </div>
               {value.ocrLanguages.length === 0 && (
                 <p className="text-xs text-muted-foreground opacity-60">
-                  Nessuna selezione = usa default
+                  No selection = use default
                 </p>
               )}
             </div>

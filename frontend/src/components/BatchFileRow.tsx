@@ -5,11 +5,11 @@ import { cn } from '@/lib/utils';
 
 // Status badge colors
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
-  pending:    { label: 'In attesa',    className: 'bg-muted text-muted-foreground' },
-  converting: { label: 'Conversione', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' },
-  done:       { label: 'Completato',  className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' },
-  error:      { label: 'Errore',      className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' },
-  cancelled:  { label: 'Annullato',   className: 'bg-muted text-muted-foreground' },
+  pending:    { label: 'Pending',     className: 'bg-muted text-muted-foreground' },
+  converting: { label: 'Converting',  className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' },
+  done:       { label: 'Done',        className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' },
+  error:      { label: 'Error',       className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' },
+  cancelled:  { label: 'Cancelled',   className: 'bg-muted text-muted-foreground' },
 };
 
 interface BatchFileRowProps {
@@ -43,7 +43,7 @@ export function BatchFileRow({ item, onRetry, onCancel }: BatchFileRowProps) {
           size="sm"
           className="h-6 w-6 p-0"
           onClick={() => onCancel(item.id)}
-          aria-label="Annulla"
+          aria-label="Cancel"
         >
           <X className="h-3 w-3" />
         </Button>
@@ -59,7 +59,7 @@ export function BatchFileRow({ item, onRetry, onCancel }: BatchFileRowProps) {
       {/* Retry button — only on error */}
       {item.status === 'error' && (
         <Button variant="outline" size="sm" onClick={() => onRetry(item.id)}>
-          Riprova
+          Retry
         </Button>
       )}
     </div>

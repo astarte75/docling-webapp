@@ -129,7 +129,7 @@ export default function App() {
             {/* Left sidebar: upload for next file + options below */}
             <aside className="space-y-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-2">Converti un altro file</p>
+                <p className="text-xs text-muted-foreground mb-2">Convert another file</p>
                 <UploadZone
                   onFilesSelected={handleFilesSelected}
                   disabled={false}
@@ -141,7 +141,7 @@ export default function App() {
             {/* Right panel: result */}
             <main className="min-w-0">
               <div className="mb-3 flex items-center gap-2">
-                <p className="text-sm font-medium text-muted-foreground">Conversione completata</p>
+                <p className="text-sm font-medium text-muted-foreground">Conversion complete</p>
                 {state.ocrEngineRequested ? (
                   <span className="inline-flex items-center rounded-full border border-yellow-500/50 bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-600 dark:text-yellow-400">
                     OCR: {OCR_ENGINES.find(e => e.value === state.ocrEngineRequested)?.label ?? state.ocrEngineRequested} → {OCR_ENGINES.find(e => e.value === state.ocrEngine)?.label ?? state.ocrEngine}
@@ -196,7 +196,7 @@ export default function App() {
             {isBatch ? (
               /* Batch compact strip */
               <div className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3">
-                <span className="text-sm text-muted-foreground">Aggiungi altri file:</span>
+                <span className="text-sm text-muted-foreground">Add more files:</span>
                 <div className="flex-1">
                   <UploadZone
                     onFilesSelected={(files) => batchHook.addFiles(files, currentOptions)}
@@ -243,7 +243,7 @@ export default function App() {
                 variant="outline"
                 onClick={() => handleFilesSelected([state.file])}
               >
-                Riprova
+                Retry
               </Button>
             </div>
           )}

@@ -96,7 +96,7 @@ async def convert(
     Returns:
         202: {"job_id": "<uuid>"} — job accepted, connect to SSE stream for progress
         413: {"error": "File exceeds 50MB limit"}
-        415: {"error": "Unsupported file type. Only PDF accepted."}
+        415: {"error": "Unsupported file type. Accepted: PDF, DOCX, PPTX, XLSX, HTML, MD."}
     """
     # Validate file extension before reading content
     filename = file.filename or ""
@@ -104,7 +104,7 @@ async def convert(
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail="Unsupported file type. Only PDF accepted.",
+            detail="Unsupported file type. Accepted: PDF, DOCX, PPTX, XLSX, HTML, MD.",
         )
 
     # Read file in 1MB chunks, enforcing size limit BEFORE writing to disk

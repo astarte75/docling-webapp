@@ -10,7 +10,7 @@ export function ConversionProgress({ onCancel }: ConversionProgressProps) {
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
       <p className="text-sm text-muted-foreground">Converting your document...</p>
       <Button variant="ghost" size="sm" onClick={onCancel}>
-        Annulla
+        Cancel
       </Button>
     </div>
   );
