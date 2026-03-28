@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.3] — 2026-03-28
+
+### Changed
+- Renamed `docker-compose.prod.yml` → `docker-compose.yml` (pre-built DockerHub images are now the default)
+- Renamed `docker-compose.yml` → `docker-compose.build.yml` (build from source)
+- Removed `nginx.conf` volume mount from default compose — nginx config is already baked into the frontend image via `Dockerfile.frontend`
+- Deploy is now a single file: just copy `docker-compose.yml` to any machine and run `docker compose up -d`
+- Updated all documentation (README, compose file comments, dev override) to reflect new naming
+
+---
+
 ## [v1.2] — 2026-03-04
 
 ### Added

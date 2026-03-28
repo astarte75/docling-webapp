@@ -1,22 +1,22 @@
-# Production Docker Compose — runs the full stack with a single command:
-#   docker compose up --build -d
+# Default Docker Compose — pulls pre-built images from DockerHub:
+#   docker compose up -d
 #
-# For local development, use:
-#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# No source code or build tools required on the deployment server.
+#
+# To build from source instead, use docker-compose.build.yml.
+# For development with hot-reload, use docker-compose.build.yml + docker-compose.dev.yml.
 #
 # Environment variables (all optional — defaults cover standard deployments):
-#   PORT              Host port exposed by nginx (default: 3000)
+#   PORT                Host port exposed by the frontend (default: 3000)
 #   MAX_UPLOAD_SIZE_MB  Upload file size limit in MB (default: 50)
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ricky75/docling-webapp-backend:latest
+    pull_policy: always
     environment:
       - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-50}
     restart: unless-stopped
-    # Backend not exposed directly — nginx talks to it via Docker network
     healthcheck:
       test: ["CMD", "python", "-c",
              "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
@@ -26,9 +26,8 @@ services:
       start_period: 90s  # Docling model loading takes 30-60s on first start
 
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    image: ricky75/docling-webapp-frontend:latest
+    pull_policy: always
     ports:
       - "${PORT:-3000}:80"
     depends_on:

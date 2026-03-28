@@ -1,5 +1,5 @@
-# Development override — use together with docker-compose.yml:
-#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Development override — use together with docker-compose.build.yml:
+#   docker compose -f docker-compose.build.yml -f docker-compose.dev.yml up
 #
 # This override:
 #   - Enables --reload for backend hot-reload

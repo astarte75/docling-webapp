@@ -49,7 +49,7 @@ Pull pre-built multi-arch images from DockerHub — no source code or build tool
 ### Deploy
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d
+docker compose up -d
 ```
 
 The app is available at **http://localhost:3000**.
@@ -57,7 +57,7 @@ The app is available at **http://localhost:3000**.
 To use a different port:
 
 ```bash
-PORT=8080 docker compose -f docker-compose.prod.yml up -d
+PORT=8080 docker compose up -d
 ```
 
 > **Note:** The backend image is ~1.5 GB (Docling ML models pre-baked). First pull takes a few minutes depending on network speed. Subsequent starts are instant.
@@ -65,8 +65,8 @@ PORT=8080 docker compose -f docker-compose.prod.yml up -d
 ### Update (existing users)
 
 ```bash
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
+docker compose pull
+docker compose up -d
 ```
 
 Images: [ricky75/docling-webapp-backend](https://hub.docker.com/r/ricky75/docling-webapp-backend) · [ricky75/docling-webapp-frontend](https://hub.docker.com/r/ricky75/docling-webapp-frontend)
@@ -81,10 +81,10 @@ Images: [ricky75/docling-webapp-backend](https://hub.docker.com/r/ricky75/doclin
 - ~4 GB disk space (models are pre-downloaded into the image)
 - No GPU required (CPU inference)
 
-### Production (recommended)
+### Build and run
 
 ```bash
-docker compose up --build -d
+docker compose -f docker-compose.build.yml up --build -d
 ```
 
 The app is available at **http://localhost:3000**.
@@ -92,13 +92,13 @@ The app is available at **http://localhost:3000**.
 To use a different port:
 
 ```bash
-PORT=8080 docker compose up --build -d
+PORT=8080 docker compose -f docker-compose.build.yml up --build -d
 ```
 
 ### Development (hot reload)
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.build.yml -f docker-compose.dev.yml up --build
 ```
 
 This mounts `./backend` into the container and enables `--reload` on Uvicorn. The frontend is still served via nginx (no Vite dev server in this mode). Edit `frontend/` files and run `npm run build` locally to see changes, or use the local dev setup below.
@@ -138,7 +138,7 @@ The Vite dev server runs at **http://localhost:5173** and proxies `/api/` to `ht
 Works out of the box with Docker Desktop or OrbStack.
 
 ```bash
-docker compose up --build -d
+docker compose up -d
 ```
 
 For local development without Docker, install Tesseract if you plan to use that OCR engine:
@@ -155,7 +155,7 @@ Works with Docker Engine and Docker Compose v2 (no Desktop needed).
 # Install Docker Engine if not already present
 curl -fsSL https://get.docker.com | sh
 
-docker compose up --build -d
+docker compose up -d
 ```
 
 For Tesseract OCR in local dev (no Docker):
@@ -177,7 +177,7 @@ Use **Docker Desktop with WSL 2** backend.
 3. Open a WSL terminal and run:
 
 ```bash
-docker compose up --build -d
+docker compose up -d
 ```
 
 For local development without Docker, use WSL 2 (Ubuntu recommended) and follow the Linux instructions above.
@@ -186,7 +186,7 @@ For local development without Docker, use WSL 2 (Ubuntu recommended) and follow 
 
 ## Configuration
 
-Environment variables for the production stack (`docker-compose.yml`):
+Environment variables (apply to both `docker-compose.yml` and `docker-compose.build.yml`):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -219,6 +219,7 @@ PORT=8080 MAX_CONCURRENT_JOBS=4 docker compose up -d
 ├── Dockerfile            # Backend image (Python 3.12 + Docling models)
 ├── Dockerfile.frontend   # Frontend image (Node 22 build + nginx serve)
 ├── nginx.conf            # Reverse proxy with SSE-safe configuration
-├── docker-compose.yml    # Production stack
-└── docker-compose.dev.yml # Development overrides
+├── docker-compose.yml       # Default stack (pre-built DockerHub images)
+├── docker-compose.build.yml # Build from source
+└── docker-compose.dev.yml   # Development overrides (hot reload)
 ```
