@@ -25,6 +25,11 @@ Web application for document conversion to Markdown using IBM Docling.
 - `ricky75/docling-webapp-backend:latest`
 - `ricky75/docling-webapp-frontend:latest`
 - Multi-arch build (amd64/arm64): `make push` or `make push TAG=v1.x`
+- **IMPORTANT**: After pushing, always verify both architectures are pullable:
+  ```bash
+  docker manifest inspect ricky75/docling-webapp-backend:latest
+  docker manifest inspect ricky75/docling-webapp-frontend:latest
+  ```
 
 ## OCR Engines
 
