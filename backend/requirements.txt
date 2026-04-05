@@ -1,7 +1,7 @@
 fastapi>=0.135.0
 uvicorn[standard]
 python-multipart
-docling
+docling>=2.84.0
 rapidocr-onnxruntime
 tesserocr
 easyocr
