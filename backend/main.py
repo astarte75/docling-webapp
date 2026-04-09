@@ -13,9 +13,9 @@ from fastapi.routing import APIRouter
 from fastapi.staticfiles import StaticFiles
 from typing import Optional
 
-from converter import ConversionOptions, VlmConverter, StandardConverter
-from config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
-from job_store import Job, conversion_worker
+from backend.converter import ConversionOptions, VlmConverter, StandardConverter
+from backend.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_BYTES
+from backend.job_store import Job, conversion_worker
 
 logging.basicConfig(
     level=logging.INFO,

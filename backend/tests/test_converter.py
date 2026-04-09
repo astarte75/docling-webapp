@@ -4,7 +4,7 @@ Unit tests only — no actual Docling model loading.
 """
 
 import pytest
-from converter import ConversionOptions, resolve_engine
+from backend.converter import ConversionOptions, resolve_engine
 
 
 class TestConversionOptionsDefaults:

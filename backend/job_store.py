@@ -3,8 +3,8 @@ import logging
 import os
 from dataclasses import dataclass, field
 
-from converter import ConversionOptions, resolve_engine
-from config import MAX_CONCURRENT_JOBS
+from backend.converter import ConversionOptions, resolve_engine
+from backend.config import MAX_CONCURRENT_JOBS
 
 logger = logging.getLogger(__name__)
 
