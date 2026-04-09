@@ -82,4 +82,5 @@ export interface BatchFile {
   jobId?: string;
   markdown?: string;
   errorMessage?: string;
+  progressMessage?: string;
 }

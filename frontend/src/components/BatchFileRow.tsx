@@ -28,8 +28,15 @@ export function BatchFileRow({ item, onRetry, onCancel }: BatchFileRowProps) {
         {item.file.name}
       </span>
 
+      {/* Progress message for converting files */}
+      {item.status === 'converting' && item.progressMessage && (
+        <span className="text-xs text-muted-foreground truncate max-w-[250px]" title={item.progressMessage}>
+          {item.progressMessage}
+        </span>
+      )}
+
       {/* Status badge with spinner for converting */}
-      <div className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium', badge.className)}>
+      <div className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium shrink-0', badge.className)}>
         {item.status === 'converting' && (
           <Loader2 className="h-3 w-3 animate-spin" />
         )}

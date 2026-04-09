@@ -34,15 +34,20 @@ function connectJobStream(
     updateItem(itemId, { status: 'converting' });
   });
 
+  es.addEventListener('progress', (e: MessageEvent) => {
+    const data = JSON.parse(e.data);
+    updateItem(itemId, { progressMessage: data.message });
+  });
+
   es.addEventListener('completed', (e: MessageEvent) => {
     const data = JSON.parse(e.data);
-    updateItem(itemId, { status: 'done', markdown: data.markdown });
+    updateItem(itemId, { status: 'done', markdown: data.markdown, progressMessage: undefined });
     es.close();
   });
 
   es.addEventListener('failed', (e: MessageEvent) => {
     const data = JSON.parse(e.data);
-    updateItem(itemId, { status: 'error', errorMessage: data.message });
+    updateItem(itemId, { status: 'error', errorMessage: data.message, progressMessage: undefined });
     es.close();
   });
 
