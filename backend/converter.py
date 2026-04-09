@@ -171,14 +171,39 @@ class StandardConverter:
         self, file_path: str, opts: ConversionOptions, on_progress: ProgressCallback = None,
     ) -> str:
         """Convert a file to Markdown using Docling's standard pipeline."""
+        total_pages = 0
         if on_progress:
             if file_path.lower().endswith(".pdf"):
-                total = get_pdf_page_count(file_path)
-                on_progress(f"Converting with Standard pipeline ({total} pages)...")
+                total_pages = get_pdf_page_count(file_path)
+                on_progress(f"Converting with Standard pipeline ({total_pages} pages)...")
             else:
                 on_progress("Converting...")
 
-        result = await asyncio.to_thread(self._converter.convert, source=file_path)
+        # Capture per-page progress from Docling's pipeline profiling logs
+        seen_pages: set[int] = set()
+
+        class _PageProgressHandler(logging.Handler):
+            def emit(self, record: logging.LogRecord) -> None:
+                msg = record.getMessage()
+                # Docling logs "Stage assemble: ... pages=[N]" when a page is done
+                if "Stage assemble" in msg and "pages=[" in msg and on_progress and total_pages:
+                    try:
+                        page_num = int(msg.split("pages=[")[1].split("]")[0])
+                        if page_num not in seen_pages:
+                            seen_pages.add(page_num)
+                            on_progress(f"Standard: page {len(seen_pages)}/{total_pages}")
+                    except (IndexError, ValueError):
+                        pass
+
+        handler = _PageProgressHandler()
+        handler.setLevel(logging.DEBUG)
+        pipeline_logger = logging.getLogger("docling.pipeline.standard_pdf_pipeline")
+        pipeline_logger.addHandler(handler)
+
+        try:
+            result = await asyncio.to_thread(self._converter.convert, source=file_path)
+        finally:
+            pipeline_logger.removeHandler(handler)
 
         if result.status.value != "success":
             raise RuntimeError(f"Docling conversion status: {result.status}")
