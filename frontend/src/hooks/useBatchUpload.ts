@@ -8,12 +8,10 @@ async function uploadFileWithOptions(
 ): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('ocr_mode', opts.ocrMode);
-  formData.append('ocr_engine', opts.ocrEngine);
+  formData.append('engine', opts.engine);
   formData.append('table_detection', String(opts.tableDetection));
   if (opts.pageFrom !== null) formData.append('page_from', String(opts.pageFrom));
   if (opts.pageTo !== null) formData.append('page_to', String(opts.pageTo));
-  if (opts.ocrLanguages.length > 0) formData.append('ocr_languages', opts.ocrLanguages.join(','));
 
   const res = await fetch('/api/convert', { method: 'POST', body: formData });
   if (!res.ok) {
