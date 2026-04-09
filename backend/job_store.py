@@ -3,7 +3,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 
-from adapter import ConversionOptions
+from converter import ConversionOptions, resolve_engine
 from config import MAX_CONCURRENT_JOBS
 
 logger = logging.getLogger(__name__)
@@ -11,15 +11,10 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Job:
-    """Represents a single conversion job in the system.
-
-    options: per-job conversion settings (OCR mode, table detection, page range, languages)
-    events: queue of SSE event dicts pushed by the worker, consumed by the stream endpoint
-    status: queued → converting → completed | failed
-    """
-
+    """Represents a single conversion job."""
     job_id: str
     tmp_path: str
+    extension: str                  # e.g. ".pdf", ".docx"
     options: ConversionOptions = field(default_factory=ConversionOptions)
     events: asyncio.Queue = field(default_factory=asyncio.Queue)
     status: str = "queued"
@@ -28,12 +23,8 @@ class Job:
 async def conversion_worker(state) -> None:
     """Background worker that processes conversion jobs from state.dispatch_queue.
 
-    Uses asyncio.Semaphore(MAX_CONCURRENT_JOBS) to limit concurrent Docling calls.
-    Spawns each job as a fire-and-forget asyncio.create_task — the semaphore inside
-    process_job ensures at most MAX_CONCURRENT_JOBS conversions run simultaneously.
-
-    The main loop is non-blocking: it reads job IDs and immediately spawns tasks.
-    task_done() is called in process_job's finally block to maintain queue invariant.
+    Routes PDF files to VlmConverter (MLX) and non-PDF to StandardConverter.
+    Uses asyncio.Semaphore(MAX_CONCURRENT_JOBS) to limit concurrent conversions.
     """
     semaphore = asyncio.Semaphore(MAX_CONCURRENT_JOBS)
 
@@ -44,17 +35,27 @@ async def conversion_worker(state) -> None:
                 job.status = "converting"
                 await job.events.put({"type": "started", "message": "Conversion started"})
 
-                markdown, ocr_engine_used, ocr_engine_requested = await state.converter.convert_file(job.tmp_path, job.options)
+                engine = resolve_engine(job.extension, job.options.engine)
+
+                if engine == "vlm" and state.vlm is not None:
+                    markdown = await state.vlm.convert(job.tmp_path, job.options)
+                    engine_label = "vlm-mlx"
+                elif engine == "vlm" and state.vlm is None:
+                    raise RuntimeError("VLM engine not available — model failed to load at startup")
+                else:
+                    markdown = await state.standard.convert(job.tmp_path, job.options)
+                    engine_label = "standard"
 
                 job.status = "completed"
-                event: dict = {"type": "completed", "markdown": markdown, "ocr_engine": ocr_engine_used}
-                if ocr_engine_requested and ocr_engine_requested != ocr_engine_used:
-                    event["ocr_engine_requested"] = ocr_engine_requested
-                await job.events.put(event)
+                await job.events.put({
+                    "type": "completed",
+                    "markdown": markdown,
+                    "engine": engine_label,
+                })
 
             except RuntimeError as exc:
                 job.status = "failed"
-                await job.events.put({"type": "failed", "message": str(exc), "ocr_engine": job.options.ocr_engine})
+                await job.events.put({"type": "failed", "message": str(exc)})
 
             except Exception:
                 logger.exception("Unexpected error processing job %s", job_id)
