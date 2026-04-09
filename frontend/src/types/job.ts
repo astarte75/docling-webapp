@@ -45,7 +45,7 @@ export interface SSEFailedEvent {
 export type SSEEvent = SSEStartedEvent | SSECompletedEvent | SSEFailedEvent;
 
 /** Conversion engine */
-export type Engine = 'vlm' | 'standard';
+export type Engine = 'auto' | 'vlm' | 'standard';
 
 /** Conversion options — captured at file-drop time, immutable per file */
 export interface ConversionOptions {
@@ -57,7 +57,7 @@ export interface ConversionOptions {
 
 /** Default options */
 export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
-  engine: 'vlm',
+  engine: 'auto',
   tableDetection: true,
   pageFrom: null,
   pageTo: null,
@@ -65,6 +65,7 @@ export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
 
 /** Engine options for the UI */
 export const ENGINES: { value: Engine; label: string }[] = [
+  { value: 'auto', label: 'Auto' },
   { value: 'vlm', label: 'MLX (GraniteDocling)' },
   { value: 'standard', label: 'Standard' },
 ];

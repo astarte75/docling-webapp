@@ -10,7 +10,7 @@ from backend.converter import ConversionOptions, resolve_engine
 class TestConversionOptionsDefaults:
     def test_default_engine(self):
         opts = ConversionOptions()
-        assert opts.engine == "vlm"
+        assert opts.engine == "auto"
 
     def test_default_table_detection(self):
         opts = ConversionOptions()
@@ -23,7 +23,7 @@ class TestConversionOptionsDefaults:
 
 
 class TestResolveEngine:
-    def test_pdf_defaults_to_vlm(self):
+    def test_pdf_explicit_vlm(self):
         assert resolve_engine(".pdf", "vlm") == "vlm"
 
     def test_pdf_explicit_standard(self):
@@ -43,3 +43,9 @@ class TestResolveEngine:
 
     def test_md_always_standard(self):
         assert resolve_engine(".md", "vlm") == "standard"
+
+    def test_auto_without_file_defaults_to_standard(self):
+        assert resolve_engine(".pdf", "auto") == "standard"
+
+    def test_docx_auto_always_standard(self):
+        assert resolve_engine(".docx", "auto") == "standard"

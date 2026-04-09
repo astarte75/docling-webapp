@@ -35,7 +35,7 @@ async def conversion_worker(state) -> None:
                 job.status = "converting"
                 await job.events.put({"type": "started", "message": "Conversion started"})
 
-                engine = resolve_engine(job.extension, job.options.engine)
+                engine = resolve_engine(job.extension, job.options.engine, job.tmp_path)
 
                 if engine == "vlm" and state.vlm is not None:
                     markdown = await state.vlm.convert(job.tmp_path, job.options)
