@@ -1,52 +1,30 @@
-# Requires: docker login && docker buildx (bundled with Docker Desktop)
+PORT ?= 9000
 
-REGISTRY  := docker.io
-NAMESPACE := ricky75
-TAG       ?= latest
-PLATFORMS := linux/amd64,linux/arm64
-
-BACKEND_IMAGE   := $(REGISTRY)/$(NAMESPACE)/docling-webapp-backend:$(TAG)
-FRONTEND_IMAGE  := $(REGISTRY)/$(NAMESPACE)/docling-webapp-frontend:$(TAG)
-BACKEND_LATEST  := $(REGISTRY)/$(NAMESPACE)/docling-webapp-backend:latest
-FRONTEND_LATEST := $(REGISTRY)/$(NAMESPACE)/docling-webapp-frontend:latest
-
-.PHONY: help builder push-backend push-frontend push
+.PHONY: help setup build-frontend run dev clean
 
 help: ## Show available targets
-	@echo "Usage: make <target> [TAG=v1.x]"
+	@echo "Usage: make <target>"
 	@echo ""
-	@echo "Targets:"
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ { printf "  %-18s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+setup: ## Initial setup: install system deps, Python deps, and build frontend
+	@echo "Installing system dependencies..."
+	brew install tesseract || true
+	@echo "Installing Python dependencies..."
+	uv sync
+	@echo "Building frontend..."
+	cd frontend && npm install && npm run build
 	@echo ""
-	@echo "Examples:"
-	@echo "  make push TAG=v1.3   # push versioned + latest tags"
-	@echo "  make push            # push :latest only"
+	@echo "Setup complete. Run 'make run' to start the app."
 
-builder: ## Create (or reuse) the multiarch buildx builder
-	docker buildx create --name multiarch --driver docker-container --bootstrap --use 2>/dev/null || docker buildx use multiarch
+build-frontend: ## Build frontend static files
+	cd frontend && npm run build
 
-push-backend: builder ## Build and push backend multi-arch image to DockerHub
-	docker buildx build \
-		--platform $(PLATFORMS) \
-		--tag $(BACKEND_IMAGE) \
-		--tag $(BACKEND_LATEST) \
-		--file Dockerfile \
-		--push \
-		.
+run: ## Run the app (API + frontend on PORT, default 9000)
+	uv run uvicorn backend.main:app --host 0.0.0.0 --port $(PORT)
 
-push-frontend: builder ## Build and push frontend multi-arch image to DockerHub
-	docker buildx build \
-		--platform $(PLATFORMS) \
-		--tag $(FRONTEND_IMAGE) \
-		--tag $(FRONTEND_LATEST) \
-		--file Dockerfile.frontend \
-		--push \
-		.
+dev: ## Run with hot-reload (backend only, frontend served from last build)
+	uv run uvicorn backend.main:app --host 0.0.0.0 --port $(PORT) --reload
 
-push: push-backend push-frontend ## Build and push both backend and frontend images
-	@echo ""
-	@echo "Published images:"
-	@echo "  $(BACKEND_IMAGE)"
-	@echo "  $(BACKEND_LATEST)"
-	@echo "  $(FRONTEND_IMAGE)"
-	@echo "  $(FRONTEND_LATEST)"
+clean: ## Remove build artifacts
+	rm -rf frontend/dist .venv __pycache__ backend/__pycache__
