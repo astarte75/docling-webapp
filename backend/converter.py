@@ -198,12 +198,15 @@ class StandardConverter:
         handler = _PageProgressHandler()
         handler.setLevel(logging.DEBUG)
         pipeline_logger = logging.getLogger("docling.pipeline.standard_pdf_pipeline")
+        prev_level = pipeline_logger.level
+        pipeline_logger.setLevel(logging.DEBUG)
         pipeline_logger.addHandler(handler)
 
         try:
             result = await asyncio.to_thread(self._converter.convert, source=file_path)
         finally:
             pipeline_logger.removeHandler(handler)
+            pipeline_logger.setLevel(prev_level)
 
         if result.status.value != "success":
             raise RuntimeError(f"Docling conversion status: {result.status}")
