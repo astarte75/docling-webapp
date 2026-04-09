@@ -12,8 +12,8 @@ dependencies = [
     "tesserocr",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest",
     "pytest-asyncio",
     "httpx",
