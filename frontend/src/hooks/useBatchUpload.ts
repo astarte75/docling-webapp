@@ -85,9 +85,9 @@ export function useBatchUpload() {
     for (const item of items) {
       try {
         const jobId = await uploadFileWithOptions(item.file, item.options);
-        updateItem(item.id, { jobId, status: 'converting' });
+        updateItem(item.id, { jobId, status: 'queued' });
 
-        // Open SSE stream only after upload succeeds (lazy — not on 'pending')
+        // Open SSE stream only after upload succeeds
         const es = connectJobStream(jobId, item.id, updateItem);
         streamsRef.current.set(item.id, es);
       } catch (err) {
@@ -110,7 +110,7 @@ export function useBatchUpload() {
 
     try {
       const jobId = await uploadFileWithOptions(item.file, item.options);
-      updateItem(itemId, { jobId, status: 'converting' });
+      updateItem(itemId, { jobId, status: 'queued' });
       const es = connectJobStream(jobId, itemId, updateItem);
       streamsRef.current.set(itemId, es);
     } catch (err) {
@@ -124,7 +124,7 @@ export function useBatchUpload() {
     // Guard: only cancel if currently converting — prevents overwriting 'done' in race condition
     setFiles(prev => {
       const item = prev.find(f => f.id === itemId);
-      if (!item || item.status !== 'converting') return prev;
+      if (!item || (item.status !== 'converting' && item.status !== 'queued')) return prev;
       return prev.map(f => f.id === itemId ? { ...f, status: 'cancelled' as const } : f);
     });
     // Close the EventSource regardless of guard (safe: optional chaining handles missing stream)

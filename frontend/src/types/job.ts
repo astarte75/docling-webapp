@@ -71,7 +71,7 @@ export const ENGINES: { value: Engine; label: string }[] = [
 ];
 
 /** Status of a single file in a batch conversion */
-export type BatchFileStatus = 'pending' | 'converting' | 'done' | 'error' | 'cancelled';
+export type BatchFileStatus = 'pending' | 'queued' | 'converting' | 'done' | 'error' | 'cancelled';
 
 /** A single file entry in the batch list */
 export interface BatchFile {
