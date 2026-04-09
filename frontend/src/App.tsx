@@ -17,6 +17,7 @@ export default function App() {
   const [state, setState] = useState<AppPhase>({ phase: 'idle' });
   // Options state — sticky for session, reset on refresh (no localStorage)
   const [currentOptions, setCurrentOptions] = useState<ConversionOptions>(DEFAULT_CONVERSION_OPTIONS);
+  const [progressMessage, setProgressMessage] = useState<string | undefined>();
   const batchHook = useBatchUpload();
 
   // Handler for dropped files — decides single vs batch flow
@@ -55,6 +56,7 @@ export default function App() {
   const jobId = state.phase === 'converting' ? state.jobId : null;
   useJobStream(jobId, {
     onCompleted: useCallback((markdown: string, engine: string) => {
+      setProgressMessage(undefined);
       setState((prev) => ({
         phase: 'success',
         markdown,
@@ -63,11 +65,15 @@ export default function App() {
       }));
     }, []),
     onFailed: useCallback((message: string) => {
+      setProgressMessage(undefined);
       setState((prev) => ({
         phase: 'error',
         message,
         file: prev.phase === 'converting' ? prev.file : new File([], 'unknown'),
       }));
+    }, []),
+    onProgress: useCallback((message: string) => {
+      setProgressMessage(message);
     }, []),
   });
 
@@ -214,7 +220,8 @@ export default function App() {
           {/* Converting state — single file */}
           {isConverting && (
             <ConversionProgress
-              onCancel={() => setState({ phase: 'idle' })}
+              onCancel={() => { setProgressMessage(undefined); setState({ phase: 'idle' }); }}
+              message={progressMessage}
             />
           )}
 

@@ -24,26 +24,42 @@ async def conversion_worker(state) -> None:
     """Background worker that processes conversion jobs from state.dispatch_queue.
 
     Routes PDF files to VlmConverter (MLX) and non-PDF to StandardConverter.
-    Uses asyncio.Semaphore(MAX_CONCURRENT_JOBS) to limit concurrent conversions.
+    Emits SSE progress events during detection and conversion.
     """
     semaphore = asyncio.Semaphore(MAX_CONCURRENT_JOBS)
 
     async def process_job(job_id: str) -> None:
         job = state.jobs[job_id]
+        # Thread-safe progress emitter: schedules SSE event on the event loop
+        loop = asyncio.get_event_loop()
+
+        def emit_progress(message: str) -> None:
+            loop.call_soon_threadsafe(
+                job.events.put_nowait,
+                {"type": "progress", "message": message},
+            )
+
         async with semaphore:
             try:
                 job.status = "converting"
                 await job.events.put({"type": "started", "message": "Conversion started"})
 
-                engine = resolve_engine(job.extension, job.options.engine, job.tmp_path)
+                engine = resolve_engine(
+                    job.extension, job.options.engine, job.tmp_path,
+                    on_progress=emit_progress,
+                )
 
                 if engine == "vlm" and state.vlm is not None:
-                    markdown = await state.vlm.convert(job.tmp_path, job.options)
+                    markdown = await state.vlm.convert(
+                        job.tmp_path, job.options, on_progress=emit_progress,
+                    )
                     engine_label = "vlm-mlx"
                 elif engine == "vlm" and state.vlm is None:
                     raise RuntimeError("VLM engine not available — model failed to load at startup")
                 else:
-                    markdown = await state.standard.convert(job.tmp_path, job.options)
+                    markdown = await state.standard.convert(
+                        job.tmp_path, job.options, on_progress=emit_progress,
+                    )
                     engine_label = "standard"
 
                 job.status = "completed"

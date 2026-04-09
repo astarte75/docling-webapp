@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 interface StreamCallbacks {
   onCompleted: (markdown: string, engine: string) => void;
   onFailed: (message: string) => void;
+  onProgress?: (message: string) => void;
 }
 
 export function useJobStream(jobId: string | null, callbacks: StreamCallbacks) {
@@ -13,6 +14,11 @@ export function useJobStream(jobId: string | null, callbacks: StreamCallbacks) {
     if (!jobId) return;
 
     const es = new EventSource(`/api/jobs/${jobId}/stream`);
+
+    es.addEventListener('progress', (e: MessageEvent) => {
+      const data = JSON.parse(e.data) as { type: 'progress'; message: string };
+      callbacksRef.current.onProgress?.(data.message);
+    });
 
     es.addEventListener('completed', (e: MessageEvent) => {
       const data = JSON.parse(e.data) as { type: 'completed'; markdown: string; engine: string };
