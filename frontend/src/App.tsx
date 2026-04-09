@@ -59,7 +59,7 @@ export default function App() {
         phase: 'success',
         markdown,
         filename: prev.phase === 'converting' ? prev.file.name : 'document',
-        engine: engine as import('@/types/job').Engine,
+        engine,
       }));
     }, []),
     onFailed: useCallback((message: string) => {

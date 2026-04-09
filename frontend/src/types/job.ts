@@ -5,7 +5,7 @@ export type AppPhase =
   | { phase: 'idle' }
   | { phase: 'uploading'; file: File }
   | { phase: 'converting'; jobId: string; file: File }
-  | { phase: 'success'; markdown: string; filename: string; engine: Engine }
+  | { phase: 'success'; markdown: string; filename: string; engine: string }
   | { phase: 'error'; message: string; file: File }
   | { phase: 'batch-active'; files: BatchFile[] }
   | { phase: 'batch-complete'; files: BatchFile[] };
